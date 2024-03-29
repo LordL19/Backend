@@ -4,7 +4,7 @@ const jwt = Jwt
 export class AuthMiddleware {
 
     static async ValidateUser(req: Request, res: Response, next: NextFunction) {
-        const auth = req.headers.authorization ?? req.cookies.token ?? null;
+        const auth = req.cookies.token ?? req.headers.authorization  ?? null;
         if (!auth) return res.status(400).json({ error: "Authentication token not provided" })
         let token = auth;
         if (auth.startsWith("Bearer ")) token = auth.split(" ")[1];

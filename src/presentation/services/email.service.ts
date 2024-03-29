@@ -5,9 +5,9 @@ interface attachments {
     path: string
 }
 
-interface SendEmailOptions {
+interface SendEmailOptions<T> {
     from?: string
-    to: string | string[],
+    to: T,
     subject: string,
     html: string,
     attachments?: attachments[]
@@ -29,7 +29,7 @@ export class EmailService {
         })
     }
 
-    async sendEmail(options: SendEmailOptions): Promise<boolean> {
+    async sendEmail(options: SendEmailOptions<string>): Promise<boolean> {
         const { from = this.mailerEmail, to, subject, html, attachments = [] } = options
         try {
             await this.transport.sendMail({
@@ -44,5 +44,12 @@ export class EmailService {
             console.log(error);
             return false;
         }
+    }
+
+    async sendEmails(options: SendEmailOptions<string[]>) {
+        const { to } = options;
+        to.forEach(async email => {
+            await this.sendEmail({ ...options, to: email });
+        });
     }
 }

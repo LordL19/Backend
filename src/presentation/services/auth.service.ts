@@ -15,7 +15,7 @@ export class AuthService {
         private readonly emailService: EmailService
     ) { }
 
-    private sendEmail(user: UserEntity, subject: string = "Validacion de cuenta") {
+    private sendEmailToVerifyCode(user: UserEntity, subject: string = "Validacion de cuenta") {
         const { getName: name, getEmail: to } = user;
         const codeVerification = code.generate();
         const html = EmailValidationView.create({ user: name, code: codeVerification })
@@ -29,26 +29,32 @@ export class AuthService {
 
     async validateEmail(verification: CodeVerificationDto) {
         const isValidCode = code.verify(verification.code, verification.serverCode);
-        if (!isValidCode) throw ResponseError.badRequest({ code: "Code is incorrect." })
-        await this.datasource.validateEmail(verification.user);
+        if (!isValidCode) throw ResponseError.badRequest({ code: "The code is incorrect." })
+        this.datasource.validateEmail(verification.user);
+        const user = await this.datasource.getById(verification.user);
+        const token = {
+            data: await jwt.generateToken({ id: user.getId }, EXPIRE),
+            expire: new Date(Date.now() + ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000)) //1 Day
+        }
         return {
-            message: `Email validated successfully`
+            message: `Email validated successfully`,
+            token
         };
     }
 
     async login(loginDto: LoginDto) {
         const user = await this.datasource.getByEmail(loginDto.email);
         const isPassword = await bcrypt.compare(loginDto.password, user.getPassword);
-        if (!isPassword) throw ResponseError.badRequest({ password: "Incorrect password." });
-        if(!user.getValidatedEmail) throw ResponseError.forbidden({validated_email:"Email must be validated"})
+        if (!isPassword) throw ResponseError.badRequest({ password: "The password is incorrect." });
         const token = {
-            data: await jwt.generateToken({ id: user.getId }, EXPIRE),
-            expire: new Date(Date.now() + ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000)) //1 Day
+            data: await jwt.generateToken({ id: user.getId }, user.getValidatedEmail ? EXPIRE : "10m"),
+            expire: new Date(Date.now() + (user.getValidatedEmail ? ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000) : 10 * 60 * 1000))
         }
         return {
             user: {
                 name: user.getName,
-                email: user.getEmail
+                email: user.getEmail,
+                validated_email: user.getValidatedEmail
             },
             token
         }
@@ -57,13 +63,14 @@ export class AuthService {
     async register(userDto: CreateUserDto) {
         const hashedPassword = await bcrypt.generate(userDto.password);
         const user = await this.datasource.create({ ...userDto, password: hashedPassword });
+        const expire = new Date(Date.now() + (10 * 60 * 1000)); //10 minutes
         const token = {
-            data: await jwt.generateToken({ id: user.getId }, EXPIRE),
-            expire: new Date(Date.now() + ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000)) //1 Day
+            data: await jwt.generateToken({ id: user.getId }, "10m"),
+            expire
         }
         const code = {
-            data: await Jwt.generateToken({ code: this.sendEmail(user) }, "5m"), //minutes
-            expire: new Date(Date.now() + (5 * 60 * 60 * 1000)) //5 minutes
+            data: await Jwt.generateToken({ code: this.sendEmailToVerifyCode(user) }, "10m"),
+            expire
         }
         return {
             user: {
@@ -75,13 +82,20 @@ export class AuthService {
         }
     }
 
-    async sendCode(id: string) {
-        const user = await this.datasource.getById(id);
+    async sendCode(email: string) {
+        if (!email) throw ResponseError.badRequest({ email: "Email is required." })
+        const user = await this.datasource.getByEmail(email);
+        const expire = new Date(Date.now() + (10 * 60 * 1000)); //10 minutes
+        const token = {
+            data: await jwt.generateToken({ id: user.getId }, "10m"),
+            expire
+        }
         const code = {
-            data: await Jwt.generateToken({ code: this.sendEmail(user) }, "5m"), //minutes
-            expire: new Date(Date.now() + (5 * 60 * 1000)) //5 minutes
+            data: await Jwt.generateToken({ code: this.sendEmailToVerifyCode(user) }, "10m"),
+            expire
         }
         return {
+            token,
             code
         }
     }

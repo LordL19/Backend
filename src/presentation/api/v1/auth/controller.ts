@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../../../services/auth.service";
-import { CodeVerificationDto, CreateUserDto, LoginDto } from "../../../../domain";
+import { CodeVerificationDto, CreateUserDto, LoginDto, ResponseError } from "../../../../domain";
 
 export class AuthController {
     constructor(
@@ -16,6 +16,12 @@ export class AuthController {
                 res.json({ user, token: data })
             })
             .catch(e => next(e));
+    }
+
+    logout = (req: Request, res: Response) => {
+        res.clearCookie("token");
+        res.clearCookie("code")
+        res.json({ message: "Session successfully closed." })
     }
 
     validateEmail = (req: Request, res: Response, next: NextFunction) => {
@@ -38,11 +44,12 @@ export class AuthController {
     }
 
     sendCode = (req: Request, res: Response, next: NextFunction) => {
-        const { user } = req.body;
-        this.service.sendCode(user)
+        const { email } = req.body;
+        this.service.sendCode(email)
             .then(result => {
                 res.cookie("code", result.code.data, { httpOnly: true, expires: result.code.expire })
-                res.json({message:"The code was sent successfully."})
+                res.cookie("token", result.token.data, { httpOnly: true, expires: result.token.expire })
+                res.json({ message: "The code was sent successfully." })
             })
             .catch(e => next(e));
     }

@@ -8,12 +8,12 @@ export class AuthRouter {
     static get routes() {
         const controller = new AuthController(Services.auth);
         const auth = Router();
-        auth.get("/send-code", [AuthMiddleware.ValidateUser], controller.sendCode);
-        
+
+        auth.post("/send-code", controller.sendCode);
         auth.post("/login", controller.login);
         auth.post("/register", controller.register);
         auth.post("/validate-email", [AuthMiddleware.ValidateUser, CodeVericationMiddleware.ValidateCode], controller.validateEmail);
-        
+
         return auth;
     }
 }
