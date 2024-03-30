@@ -1,7 +1,6 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { AuthController } from "./controller";
 import { Services } from "../../../services/services";
-import { CodeVericationMiddleware } from "../../../middlewares/code-verify.middleware";
 import { AuthMiddleware } from "../../../middlewares/auth.middleware";
 
 export class AuthRouter {
@@ -9,10 +8,14 @@ export class AuthRouter {
         const controller = new AuthController(Services.auth);
         const auth = Router();
 
-        auth.post("/send-code", controller.sendCode);
+        auth.get("/logout", controller.logout);
+        auth.post("/send-verfication-code", controller.sendVerificationCode);
+        auth.post("/send-reset-code", controller.sendResetPassword);
         auth.post("/login", controller.login);
         auth.post("/register", controller.register);
-        auth.post("/validate-email", [AuthMiddleware.ValidateUser, CodeVericationMiddleware.ValidateCode], controller.validateEmail);
+        auth.post("/reset-password", [AuthMiddleware.ValidateResetPassword], controller.resetPassword);
+        auth.post("/validate-email", [AuthMiddleware.ValidateUser, AuthMiddleware.ValidateCode], controller.validateEmail);
+        auth.post("/verify-code", [AuthMiddleware.ValidateUser, AuthMiddleware.ValidateCode], controller.verifyCode);
 
         return auth;
     }

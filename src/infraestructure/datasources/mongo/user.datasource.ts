@@ -33,6 +33,11 @@ export class UserDatasource implements IUserDatasoruce {
         });
     }
 
+    async resetPassword({ user, password }: { user: string, password: string }): Promise<void> {
+        await this.existsUserWithId(user);
+        await UserModel.findByIdAndUpdate(user, { password });
+    }
+
     async create(userDto: CreateUserDto): Promise<UserEntity> {
         await this.existsUserWithEmail(userDto.email);
         const newUser = await UserModel.create(userDto);

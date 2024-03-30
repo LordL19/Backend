@@ -33,7 +33,7 @@ export class SendChatView {
         <body>
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <h2>Hola, Asesor</h2>
-            <p>Una persona desea confirmar una instrucción o solicitar otra información. A continuación, encontrarás informacion y el historial del chat entre el visitante y el asistente virtual:</p>
+            <p>Una persona desea confirmar una inscripción o solicitar otra información. A continuación, encontrarás informacion y el historial del chat entre el visitante y el asistente virtual:</p>
             <hr>
             <h3>Informacion de contacto</h3>
             <p><strong>Nombre:</strong> ${user.name}</p>
