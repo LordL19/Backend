@@ -1,5 +1,6 @@
-import express, { NextFunction, Request, Response, Router } from "express";
+import express, { Router } from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors"
 import { ErrorMiddleware } from "./middlewares/error.middleware";
 
 export class Server {
@@ -12,15 +13,12 @@ export class Server {
     }
 
     private configure() {
-        
-        this.service.use((req: Request, res: Response, next: NextFunction) => {
-            res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            res.setHeader('Access-Control-Allow-Credentials', 'true');
-            next();
-        })
-
+        this.service.use(cors({
+            origin: 'http://localhost:5173',
+            methods: 'GET, POST, PUT, DELETE',
+            allowedHeaders: 'Content-Type, Authorization',
+            credentials: true,
+        }))
         this.service.use(express.json());
         this.service.use(express.urlencoded({ extended: true }));
         this.service.use(cookieParser());
