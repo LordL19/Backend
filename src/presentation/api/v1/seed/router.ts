@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
-import { Seed } from "../../../../infraestructure/seeds/campus.seed";
+import { Seed } from "../../../../infraestructure";
 
 export class SeedRouter {
     static get routes() {
         const seed = Router();
 
         seed.get("/", (req: Request, res: Response) => {
-            Seed.seedCampus()
+            Seed.campus()
                 .then(() => res.json({ message: "seeded succefully" }))
         })
 

@@ -1,4 +1,4 @@
-import { CampusModel } from "../../data/mongo/models/campus"
+import { CampusModel } from "../../data"
 
 const campus = [
     {
@@ -19,8 +19,7 @@ const campus = [
 ]
 
 export class Seed {
-
-    static seedCampus = async () => {
+    static campus = async () => {
         const data = await CampusModel.find();
         if (data.length === 0) await CampusModel.insertMany(campus);
     }

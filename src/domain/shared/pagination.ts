@@ -1,7 +1,6 @@
 import { PaginationDto } from "../dtos/shared/pagination.dto";
 
 export class Pagination {
-
     static create(pagination: PaginationDto, route: string, total: number, data: unknown[]) {
         const start = (pagination.limit * (pagination.page - 1)) + 1;
         const end = pagination.page * pagination.limit;
