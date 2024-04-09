@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../../../services/user.service";
-import { DtoValidation, UpdateUserDto } from "../../../../domain";
+import { UpdateUserDto } from "../../../../domain";
 
 export class UserController {
     constructor(

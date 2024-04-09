@@ -1,8 +1,5 @@
-import { CampusModel } from "../../../data/mongo/models/campus";
-import { ResponseError } from "../../../domain";
-import { ICampusDatasource } from "../../../domain/datasources/campus.datasource";
-import { CreateCampusDto } from "../../../domain/dtos/campus/create.dto";
-import { CampusEntity } from "../../../domain/entities/campus.entity";
+import { CampusModel } from "../../../data";
+import { CampusEntity, CreateCampusDto, ICampusDatasource, ResponseError } from "../../../domain";
 
 export class CampusDatasource implements ICampusDatasource {
     async getAll(): Promise<CampusEntity[]> {

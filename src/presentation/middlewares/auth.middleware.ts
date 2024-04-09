@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Jwt } from "../../config";
-import { error } from "console";
+import { Jwt } from "../../helpers";
+
 const jwt = Jwt
 export class AuthMiddleware {
 

@@ -1,6 +1,6 @@
+import { CodeVerificationDto, CreateUserDto, DtoValidation, LoginDto } from "../../../../domain";
 import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../../../services/auth.service";
-import { CodeVerificationDto, CreateUserDto, DtoValidation, LoginDto, ResponseError } from "../../../../domain";
 
 export class AuthController {
     constructor(

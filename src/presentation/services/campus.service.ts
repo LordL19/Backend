@@ -1,5 +1,4 @@
-import { ICampusDatasource } from "../../domain/datasources/campus.datasource";
-import { CreateCampusDto } from "../../domain/dtos/campus/create.dto";
+import { CreateCampusDto, ICampusDatasource } from "../../domain";
 
 export class CampusService {
     constructor(

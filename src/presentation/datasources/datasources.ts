@@ -1,5 +1,4 @@
-import { CampusDatasource } from "../../infraestructure/datasources/mongo/campus.datasource";
-import { UserDatasource } from "../../infraestructure/datasources/mongo/user.datasource";
+import { CampusDatasource, UserDatasource } from "../../infraestructure"
 
 export class Datasources {
     static get user() {
