@@ -11,7 +11,7 @@ export class AuthMiddleware {
         if (auth.startsWith("Bearer ")) token = auth.split(" ")[1];
         try {
             const payload = await jwt.verifyToken<{ id: number }>(token);
-            req.body.user = payload.id;
+            req.body.id_user = payload.id;
             next();
         } catch (error) {
             next(error);
@@ -26,7 +26,7 @@ export class AuthMiddleware {
         try {
             const payload = await jwt.verifyToken<{ id: number, validatedCode: boolean }>(token);
             if (!payload.validatedCode) return res.status(400).json({ error: { auth: "You must verify the code before performing this process." } })
-            req.body.user = payload.id;
+            req.body.id_user = payload.id;
             next();
         } catch (error) {
             next(error);

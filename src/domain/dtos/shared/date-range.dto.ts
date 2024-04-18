@@ -14,7 +14,7 @@ export class DateRangeDto {
         this.to = props.to;
     }
 
-    static create(object: { [key: string]: any }): DateRangeDto {
+    static create(object: Record<string,any>): DateRangeDto {
 
         const fromDate = DtoValidation.get(object.from, "From").required().asDate().value();
         const toDate = DtoValidation.get(object.to, "To").required().asDate().value();

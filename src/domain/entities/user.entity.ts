@@ -77,7 +77,7 @@ export class UserEntity {
         return this.validated_email;
     }
 
-    static fromObject(object: { [key: string]: any }) {
+    static fromObject(object: Record<string,any>) {
         return new UserEntity(object as Props);
     }
 

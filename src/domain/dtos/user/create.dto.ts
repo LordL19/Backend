@@ -28,13 +28,13 @@ export class CreateUserDto {
         this.id_campus = props.id_campus;
     }
 
-    static create(object: { [key: string]: any }): CreateUserDto {
-        const name = DtoValidation.get(object.name, "Name").required().value();
-        const last_name = DtoValidation.get(object.last_name, "Last_name").required().value();
+    static create(object: Record<string,any>): CreateUserDto {
+        const name = DtoValidation.get(object.name, "Name").required().asString().value();
+        const last_name = DtoValidation.get(object.last_name, "Last_name").required().asString().value();
         const email = DtoValidation.get(object.email, "Email").required().asEmail().value();
-        const type = DtoValidation.get(object.type, "Type").required().value();
-        const id_campus = DtoValidation.get(object.id_campus, "Id_campus").required().value();
+        const type = DtoValidation.get(object.type, "Type").required().asString().value();
         if (!(type in Type)) throw ResponseError.badRequest({ type: `Type ${type} is not valid for types ${Object.values(Type)}` });
+        const id_campus = DtoValidation.get(object.id_campus, "Id_campus").required().asString().value();
         const password = DtoValidation.get(object.password, "Password").required().asPassword(6).value();
         return new CreateUserDto({ name, last_name, email, type: type as Type, password, id_campus });
     }

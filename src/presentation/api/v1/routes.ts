@@ -1,11 +1,10 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { UserRouter } from "./user/router";
 import { AuthRouter } from "./auth/router";
 import { AuthMiddleware } from "../../middlewares/auth.middleware";
 import { SeedRouter } from "./seed/router";
 import { CampusRouter } from "./campus/router";
-import { SectionTipeRouter } from "./section-type/router";
-
+import { SectionRouter } from "./section/router";
 export class V1 {
 
     static get routes() {
@@ -15,9 +14,7 @@ export class V1 {
         v1.use("/auth", AuthRouter.routes);
         v1.use("/campus", CampusRouter.routes);
         v1.use("/user", [AuthMiddleware.ValidateUser], UserRouter.routes);
-        v1.use("/section-types", [AuthMiddleware.ValidateUser], UserRouter.routes);
-        v1.use("/sections", [AuthMiddleware.ValidateUser], UserRouter.routes);
-        v1.use("/section-type", SectionTipeRouter.routes);
+        v1.use("/sections", [AuthMiddleware.ValidateUser], SectionRouter.routes);
         return v1;
     }
 }

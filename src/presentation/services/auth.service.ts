@@ -1,4 +1,4 @@
-import { CodeVerificationDto, CreateUserDto, IUserDatasoruce, LoginDto, ResponseError, UserEntity } from "../../domain";
+import { CodeVerificationDto, CreateUserDto, IUserDatasource, LoginDto, ResponseError, UpdateUserDto, UserEntity } from "../../domain";
 import { envs } from "../../config";
 import { Bcrypt, Code, Jwt } from "../../helpers";
 import { EmailValidationView } from "../views/email-validation.view";
@@ -12,10 +12,11 @@ const EXPIRE = envs.JWT_EXPIRES_IN;
 
 export class AuthService {
     constructor(
-        private readonly datasource: IUserDatasoruce,
+        private readonly datasource: IUserDatasource,
         private readonly emailService: EmailService
     ) { }
 
+    //TODO: Needs improvement, there is coupling
     private sendEmailToVerifyCode(user: UserEntity, type: "resetPassword" | "validateEmail", subject: string = "Validacion de cuenta") {
         const { getName: name, getEmail: to } = user;
         const codeVerification = code.generate();
@@ -37,8 +38,8 @@ export class AuthService {
 
     async validateEmail(verification: CodeVerificationDto) {
         this.vericationCode(verification);
-        this.datasource.validateEmail(verification.user);
-        const user = await this.datasource.getById(verification.user);
+        this.datasource.validateEmail(verification.id_user);
+        const user = await this.datasource.getById(verification.id_user);
         const token = {
             data: await jwt.generateToken({ id: user.getId }, EXPIRE),
             expire: new Date(Date.now() + ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000)) //1 Day
@@ -50,7 +51,7 @@ export class AuthService {
 
     async verifyCode(verification: CodeVerificationDto) {
         this.vericationCode(verification);
-        const user = await this.datasource.getById(verification.user);
+        const user = await this.datasource.getById(verification.id_user);
         const token = {
             data: await jwt.generateToken({ id: user.getId, validatedCode: true }, EXPIRE),
             expire: new Date(Date.now() + ((Number(EXPIRE.split("")[0])) * 24 * 60 * 60 * 1000)) //1 Day
@@ -100,9 +101,9 @@ export class AuthService {
         }
     }
 
-    async resetPassword({ user, password }: { user: string, password: string }) {
-        const hashedPassword = await bcrypt.generate(password);
-        await this.datasource.resetPassword({ user, password: hashedPassword })
+    async resetPassword(userDto: UpdateUserDto) {
+        userDto.password = await bcrypt.generate(userDto.password);
+        await this.datasource.resetPassword(userDto)
         return {
             message: "Password successfully updated."
         }

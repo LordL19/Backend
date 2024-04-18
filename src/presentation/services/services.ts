@@ -3,6 +3,7 @@ import { Datasources } from "../datasources/datasources";
 import { AuthService } from "./auth.service";
 import { CampusService } from "./campus.service";
 import { EmailService } from "./email.service";
+import { SectionService } from "./section.service";
 import { UserService } from "./user.service";
 
 export class Services {
@@ -26,4 +27,7 @@ export class Services {
         return new UserService(Datasources.user);
     }
 
+    static get section() {
+        return new SectionService(Datasources.section, Services.user);
+    }
 }

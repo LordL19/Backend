@@ -1,25 +1,27 @@
-import { Value } from "../../entities/section.entity";
+import { Field } from "../../entities/section.entity";
+import { DtoValidation } from "../../validations/dto.validation";
+import { InformationDto, PropsInformation } from "../shared/information.dto";
+import { SectionUtils } from "./utils";
 
-interface Props {
-    data: Record<string, Value>,
-    id_section_type: string,
-    id_user: string,
-    id_campus: string
+interface Props extends PropsInformation {
+    name: string,
+    fields: Field[]
 }
 
-export class CreateSectionDto {
-    private readonly data: Record<string, Value>;
-    private readonly id_section_type: string;
-    private readonly id_user: string;
-    private readonly id_campus: string;
-    private constructor(props: Props) {
-        this.data = props.data;
-        this.id_section_type = props.id_section_type;
-        this.id_user = props.id_user;
-        this.id_campus = props.id_campus;
+export class CreateSectionDto extends InformationDto {
+    readonly name: string;
+    readonly fields: Field[];
+
+    constructor(props: Props) {
+        super(props);
+        this.name = props.name;
+        this.fields = props.fields;
     }
 
-    static create(object: { [key: string]: any }) {
-        
+    static create(object: Record<string, any>) {
+        const name = DtoValidation.get(object.name, "Name").required().asString().value();
+        const fields = SectionUtils.ValidatePropertiesOfFields(object.fields, "Fields");
+        const id_user = DtoValidation.get(object.id_user, "Id_user").required().asString().value();
+        return new CreateSectionDto({ name, fields, id_user })
     }
 }

@@ -5,8 +5,8 @@ export class CreateCampusDto {
         readonly name: string
     ) { }
 
-    static create(object: { [key: string]: any }): CreateCampusDto {
-        const name = DtoValidation.get(object.name, "Name").required().value();
+    static create(object: Record<string, any>): CreateCampusDto {
+        const name = DtoValidation.get(object.name, "Name").required().asString().value();
         return new CreateCampusDto(name);
     }
 }

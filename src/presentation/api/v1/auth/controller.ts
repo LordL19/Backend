@@ -1,4 +1,4 @@
-import { CodeVerificationDto, CreateUserDto, DtoValidation, LoginDto } from "../../../../domain";
+import { CodeVerificationDto, CreateUserDto, DtoValidation, LoginDto, UpdateUserDto } from "../../../../domain";
 import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../../../services/auth.service";
 
@@ -59,9 +59,8 @@ export class AuthController {
     }
 
     resetPassword = (req: Request, res: Response, next: NextFunction) => {
-        const user = DtoValidation.get(req.body.user, "User").required().value();
-        const password = DtoValidation.get(req.body.password, "Password").required().asPassword(6).value();
-        this.service.resetPassword({ user, password })
+        const updateUser = UpdateUserDto.create(req.body);
+        this.service.resetPassword(updateUser)
             .then(result => {
                 res.clearCookie("token")
                 res.clearCookie("code")
@@ -71,7 +70,7 @@ export class AuthController {
     }
 
     sendVerificationCode = (req: Request, res: Response, next: NextFunction) => {
-        const email = DtoValidation.get(req.body.email, "Email").required().value();
+        const email = DtoValidation.get(req.body.email, "Email").required().asString().value();
         this.service.sendCode(email)
             .then(result => {
                 res.cookie("code", result.code.data, { httpOnly: true, expires: result.code.expire })
@@ -82,7 +81,7 @@ export class AuthController {
     }
 
     sendResetPassword = (req: Request, res: Response, next: NextFunction) => {
-        const email = DtoValidation.get(req.body.email, "Email").required().value();
+        const email = DtoValidation.get(req.body.email, "Email").required().asString().value();
         this.service.sendResetPassword(email)
             .then(result => {
                 res.cookie("code", result.code.data, { httpOnly: true, expires: result.code.expire })
