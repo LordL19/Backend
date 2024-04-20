@@ -1,27 +1,35 @@
 import { model, Schema } from 'mongoose';
 
 const SectionSchema: Schema = new Schema({
-  section_type: {
-    type: Schema.Types.ObjectId,
-    ref: 'section_types',
-    required: true
-  },
-  date: {
-    type: Object,
-    required: true
+  name: {
+    type: String,
+    required: true,
+    unique: true
   },
   id_user: {
     type: Schema.Types.ObjectId,
-    ref: 'users',
-    required: true
+    ref: 'users'
   },
-  id_campus: {
+  active: {
+    type: Boolean,
+    default: true
+  },
+  fields: [{
+    name: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ["text", "number", "date"],
+      required: true
+    }
+  }],
+  moderators: [{
     type: Schema.Types.ObjectId,
-    ref: 'campus',
-    required: true
-  }
-}, { strict: false });
-SectionSchema.index({ section_type: 1 });
+    ref: 'users'
+  }]
+});
 
 export const SectionModel = model('sections', SectionSchema);
 

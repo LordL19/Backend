@@ -6,7 +6,7 @@ export class LoginDto {
         readonly password: string,
     ) { }
 
-    static create(object: { [key: string]: any }) {
+    static create(object: Record<string,any>) {
         const email = DtoValidation.get(object.email, "Email").required().asEmail().value();
         const password = DtoValidation.get(object.password, "Password").required().asPassword(6).value();
         return new LoginDto(email, password);

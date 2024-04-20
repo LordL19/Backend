@@ -1,29 +1,45 @@
-export type Value = string | number | Date;
+export enum FieldType {
+    text = "text",
+    number = "number",
+    date = "date"
+}
+
+export interface Field {
+    name: string,
+    type: FieldType
+}
+
 interface Props {
     id: string,
-    data: Record<string, Value>
-    id_section_type: string
+    name: string
+    fields: Field[]
     id_user: string
-    id_campus: string
+    moderators: string[]
+    active: boolean
 }
 
 export class SectionEntity {
     private readonly id: string;
-    private readonly data: Record<string, Value>;
-    private readonly id_section_type: string;
+    private readonly name: string;
+    private readonly fields: Field[];
     private readonly id_user: string;
-    private readonly id_campus: string;
+    private readonly moderators: string[];
+    private readonly active: boolean;
 
     constructor(props: Props) {
         this.id = props.id;
-        this.data = props.data;
-        this.id_section_type = props.id_section_type;
+        this.name = props.name;
         this.id_user = props.id_user;
-        this.id_campus = props.id_campus;
+        this.active = props.active; 
+        this.moderators = props.moderators;
+        this.fields = props.fields;
     }
 
-    static fromObject(object: { [key: string]: any }) {
-        Object.keys(object).includes("")
+    get getIdUser() {
+        return this.id_user.toString();
+    }
+
+    static fromObject(object: Record<string, any>) {
         return new SectionEntity(object as Props);
     }
 }

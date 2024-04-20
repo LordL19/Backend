@@ -1,21 +1,19 @@
-import { IUserDatasoruce, UpdateUserDto } from "../../domain";
+import { InformationDto, IUserDatasource, UpdateUserDto } from "../../domain";
 
 export class UserService {
     constructor(
-        private readonly datasource: IUserDatasoruce
+        private readonly datasource: IUserDatasource
     ) { }
 
-    async getById(id: string) {
-        const user = await this.datasource.getById(id);
-        return user.getData;
+    getById(id: string) {
+        return this.datasource.getById(id);
     }
 
-    async update(userDto: UpdateUserDto) {
-        const user = await this.datasource.update(userDto);
-        return user.getData;
+    update(userDto: UpdateUserDto) {
+        return this.datasource.update(userDto);
     }
 
-    delete(id: string) {
-        return this.datasource.delete(id);
+    delete(information: InformationDto) {
+        return this.datasource.delete(information);
     }
 }
