@@ -14,8 +14,8 @@ export class InformationDto {
     }
 
     static create(object: Record<string, any>) {
-        const id = DtoValidation.get(object.id, "Id").required().asString().value();
-        const id_user = object.id_user && DtoValidation.get(object.id_user, "Id_user").required().asString().value();
+        const id = object.id && DtoValidation.get(object.id, "Id").asString().value();
+        const id_user = object.id_user && DtoValidation.get(object.id_user, "Id_user").asString().value();
         return new InformationDto({ id, id_user });
     }
 

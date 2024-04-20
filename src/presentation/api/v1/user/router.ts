@@ -8,10 +8,11 @@ export class UserRouter {
         const controller = new UserController(Services.user);
 
         user.get("/profile", controller.getById);
-
         user.put("/profile", controller.update);
-
         user.delete("/profile", controller.delete);
+
+
+        user.get("/search", controller.delete);
 
         return user;
     }

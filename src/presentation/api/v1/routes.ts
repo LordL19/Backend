@@ -13,7 +13,7 @@ export class V1 {
         v1.use("/seed", SeedRouter.routes);
         v1.use("/auth", AuthRouter.routes);
         v1.use("/campus", CampusRouter.routes);
-        v1.use("/user", [AuthMiddleware.ValidateUser], UserRouter.routes);
+        v1.use("/users", [AuthMiddleware.ValidateUser], UserRouter.routes);
         v1.use("/sections", [AuthMiddleware.ValidateUser], SectionRouter.routes);
         return v1;
     }
