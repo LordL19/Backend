@@ -8,7 +8,7 @@ export class UserController {
     ) { }
 
     getById = (req: Request, res: Response, next: NextFunction) => {
-        this.service.getById(req.body.user)
+        this.service.getById(req.body.id_user)
             .then(result => res.json(result.getData))
             .catch(e => next(e));
     }
@@ -23,7 +23,7 @@ export class UserController {
     delete = (req: Request, res: Response, next: NextFunction) => {
         const information = InformationDto.create(req.params)
         this.service.delete(information)
-            .then(result => res.json(result))
+            .then(() => res.json({ message: "resource deleted!" }))
             .catch(e => next(e));
     }
 }

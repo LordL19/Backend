@@ -1,9 +1,9 @@
 import { UserModel } from "../../../data";
 import { CreateUserDto, IUserDatasource, ResponseError, UpdateUserDto, UserEntity } from "../../../domain";
+import { ResetPasswordDto } from "../../../domain/dtos/auth/reset-password.dto";
 import { InformationDto } from "../../../domain/dtos/shared/information.dto";
 
 export class UserDatasource implements IUserDatasource {
-
     private async existsUserWithId(id: string) {
         const user = await UserModel.findById(id)
         if (!user) throw ResponseError.notFound({ user: `User with id ${id} not found.` });
@@ -35,9 +35,9 @@ export class UserDatasource implements IUserDatasource {
         });
     }
 
-    async resetPassword(userDto: UpdateUserDto): Promise<void> {
+    async resetPassword(userDto: ResetPasswordDto): Promise<void> {
         await this.existsUserWithId(userDto.id);
-        await UserModel.findByIdAndUpdate(userDto.id, userDto.values);
+        await UserModel.findByIdAndUpdate(userDto.id, { password: userDto.password });
     }
 
     async create(userDto: CreateUserDto): Promise<UserEntity> {
@@ -52,10 +52,9 @@ export class UserDatasource implements IUserDatasource {
         return UserEntity.fromObject(updatedUser!);
     }
 
-    async delete(information: InformationDto): Promise<boolean> {
+    async delete(information: InformationDto): Promise<void> {
         await this.existsUserWithId(information.id);
         await UserModel.updateOne({ _id: information.id }, { active: false });
-        return true;
     }
 
 }

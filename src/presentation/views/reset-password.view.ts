@@ -1,6 +1,8 @@
+import { UserEntity } from "../../domain";
+
 interface Props {
   code: string,
-  user: string,
+  user: UserEntity,
 }
 export class ResetPasswordView {
 
@@ -37,7 +39,7 @@ export class ResetPasswordView {
       <body>
         <div class="container">
           <h1>Restablecimiento de contraseña</h1>
-          <p>Hola ${props.user}.</p>
+          <p>Hola ${props.user.getName}.</p>
           <p>Para restablecer tu contraseña, por favor ingresa el siguiente código de verificación en la aplicación:</p>
           <h2>${props.code}</h2>
           <p>Saludos cordiales,<br>

@@ -14,6 +14,7 @@ interface Props {
 export class CreateUserDto {
     readonly name: string;
     readonly last_name: string;
+    readonly full_name: string;
     readonly email: string;
     readonly password: string;
     readonly type: Type;
@@ -26,9 +27,10 @@ export class CreateUserDto {
         this.password = props.password;
         this.type = props.type;
         this.id_campus = props.id_campus;
+        this.full_name = `${props.name} ${props.last_name}`;
     }
 
-    static create(object: Record<string,any>): CreateUserDto {
+    static create(object: Record<string, any>): CreateUserDto {
         const name = DtoValidation.get(object.name, "Name").required().asString().value();
         const last_name = DtoValidation.get(object.last_name, "Last_name").required().asString().value();
         const email = DtoValidation.get(object.email, "Email").required().asEmail().value();

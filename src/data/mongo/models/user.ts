@@ -3,6 +3,7 @@ import { model, Schema, Document } from 'mongoose';
 interface IUser extends Document {
     name: string;
     last_name: string;
+    full_name: string;
     password: string;
     active: boolean;
     email: string;
@@ -19,6 +20,10 @@ const UserSchema = new Schema({
         required: true
     },
     last_name: {
+        type: String,
+        required: true
+    },
+    full_name: {
         type: String,
         required: true
     },
@@ -55,20 +60,13 @@ const UserSchema = new Schema({
         updatedAt: 'updated_at'
     },
 });
-UserSchema.set("toObject", {
-    virtuals: true,
-    versionKey: false,
-    transform(doc, ret, options) {
-        delete ret._id;
-        delete ret.__v;
-        if (ret.id_campus) {
-            ret.id_campus = {
-                id: ret.id_campus._id.toString(),
-                name: ret.id_campus.name,
-            };
-        }
-    },
+
+UserSchema.post('findOneAndUpdate', function (doc: IUser, next) {
+    doc.full_name = `${doc.name} ${doc.last_name}`;
+    doc.save();
+    next();
 });
+
 export const UserModel = model<IUser>('users', UserSchema);
 
 

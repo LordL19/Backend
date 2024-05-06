@@ -8,6 +8,7 @@ export class DtoValidation {
         return {
             required: () => this.required(value, valueLower),
             asNumber: () => this.asNumber(value, valueLower),
+            asString: () => this.asString(value, valueLower),
             asDate: () => this.asDate(value, valueLower),
             asArray: () => this.asArray(value, valueLower)
         }

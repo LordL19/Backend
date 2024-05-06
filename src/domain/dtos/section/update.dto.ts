@@ -32,8 +32,8 @@ export class UpdateSectionDto extends InformationDto {
 
     static create(object: Record<string, any>) {
         const id = DtoValidation.get(object.id, "Id").required().asString().value();
-        const id_user = object.id_user && DtoValidation.get(object.id_user, "Id_user").required().asString().value();
-        const name = object.name && DtoValidation.get(object.name, "Name").required().asString().value();
+        const id_user = object.id_user && DtoValidation.get(object.id_user, "Id_user").asString().value();
+        const name = object.name && DtoValidation.get(object.name, "Name").asString().value();
         const fields = object.fields && SectionUtils.ValidatePropertiesOfFields(object.fields, "Fields");
         const moderators = object.moderators && DtoValidation.get(object.moderators, "Moderators").asArray().value();
 

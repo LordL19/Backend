@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Services } from "../../../services/services";
 import { SendChatView } from "../../../views/send-chat.view";
-import { CreateSectionDto, DtoValidation, InformationDto, PaginationDto, UpdateSectionDto } from "../../../../domain";
+import { CreateSectionDto, InformationDto, PaginationDto, UpdateSectionDto } from "../../../../domain";
 import { SectionService } from "../../../services/section.service";
 
 export class SectionController {

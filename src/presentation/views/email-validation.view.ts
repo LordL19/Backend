@@ -1,6 +1,8 @@
+import { UserEntity } from "../../domain";
+
 interface Props {
   code: string,
-  user: string,
+  user: UserEntity,
 }
 export class EmailValidationView {
 
@@ -39,7 +41,7 @@ export class EmailValidationView {
       <body>
         <div class="container">
           <h1>¡Bienvenido!</h1>
-          <p>Gracias ${props.user} por unirte a nuestra plataforma. Estamos emocionados de tenerte.</p>
+          <p>Gracias ${props.user.getName} por unirte a nuestra plataforma. Estamos emocionados de tenerte.</p>
           <p>Para completar tu registro y verificar tu correo electrónico, por favor ingresa el siguiente código de verificación en la aplicación:</p>
     
           <h2>${props.code}</h2>

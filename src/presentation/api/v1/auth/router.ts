@@ -9,13 +9,16 @@ export class AuthRouter {
         const auth = Router();
 
         auth.get("/logout", controller.logout);
-        auth.post("/send-verfication-code", controller.sendVerificationCode);
-        auth.post("/send-reset-code", controller.sendResetPassword);
+
+        auth.post("/send-verification-code", controller.sendVerificationCode);
+        auth.post("/send-reset-code", controller.sendResetPasswordCode);
+        auth.post("/verify-code", [AuthMiddleware.ValidateUser, AuthMiddleware.ValidateCode], controller.verifyCode);
+
         auth.post("/login", controller.login);
         auth.post("/register", controller.register);
-        auth.post("/reset-password", [AuthMiddleware.ValidateResetPassword], controller.resetPassword);
-        auth.post("/validate-email", [AuthMiddleware.ValidateUser, AuthMiddleware.ValidateCode], controller.validateEmail);
-        auth.post("/verify-code", [AuthMiddleware.ValidateUser, AuthMiddleware.ValidateCode], controller.verifyCode);
+
+        auth.post("/reset-password", [AuthMiddleware.ValidateUserWithCode], controller.resetPassword);
+        auth.post("/validate-email", [AuthMiddleware.ValidateUserWithCode], controller.validateEmail);
 
         return auth;
     }

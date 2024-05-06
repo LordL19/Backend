@@ -9,6 +9,7 @@ interface Props {
     id: string,
     name: string,
     last_name: string,
+    full_name: string,
     password: string,
     active: boolean,
     email: string,
@@ -23,6 +24,7 @@ export class UserEntity {
     private readonly id: string;
     private readonly name: string;
     private readonly last_name: string;
+    private readonly full_name: string;
     private readonly password: string;
     private readonly active: boolean;
     private readonly email: string;
@@ -36,6 +38,7 @@ export class UserEntity {
         this.id = props.id;
         this.name = props.name;
         this.last_name = props.last_name;
+        this.full_name = props.full_name;
         this.password = props.password;
         this.active = props.active;
         this.email = props.email;
@@ -51,6 +54,7 @@ export class UserEntity {
             id: this.id,
             name: this.name,
             last_name: this.last_name,
+            full_name: this.full_name,
             email: this.email,
             created_at: this.created_at,
             id_campus: this.id_campus
@@ -77,7 +81,7 @@ export class UserEntity {
         return this.validated_email;
     }
 
-    static fromObject(object: Record<string,any>) {
+    static fromObject(object: Record<string, any>) {
         return new UserEntity(object as Props);
     }
 

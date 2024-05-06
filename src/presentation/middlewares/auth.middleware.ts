@@ -18,7 +18,7 @@ export class AuthMiddleware {
         }
     }
 
-    static async ValidateResetPassword(req: Request, res: Response, next: NextFunction) {
+    static async ValidateUserWithCode(req: Request, res: Response, next: NextFunction) {
         const auth = req.cookies.token ?? req.headers.authorization ?? null;
         if (!auth) return res.status(400).json({ error: { auth: "Authentication token not provided." } })
         let token = auth;
@@ -34,7 +34,7 @@ export class AuthMiddleware {
     }
 
     static async ValidateCode(req: Request, res: Response, next: NextFunction) {
-        const token = req.cookies.code ?? null;
+        const token = req.cookies.code ?? req.headers.code ?? null;
         if (!token) return res.status(400).json({ error: "Code not provided in cookies." })
         try {
             const payload = await jwt.verifyToken<{ code: string }>(token);
