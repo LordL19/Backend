@@ -1,13 +1,12 @@
-import { UserEntity } from "../../domain";
+import type { UserEntity } from "../../domain";
 
 interface Props {
-  code: string,
-  user: UserEntity,
+	code: string;
+	user: UserEntity;
 }
 export class EmailValidationView {
-
-  static create(props: Props) {
-    return `
+	static create(props: Props) {
+		return `
     <!DOCTYPE html>
     <html>
       <head>
@@ -53,6 +52,6 @@ export class EmailValidationView {
         </div>
       </body>
     </html>
-        `
-  }
+        `;
+	}
 }

@@ -1,18 +1,18 @@
 interface Props {
-    id: string,
-    name: string
+	id: string;
+	name: string;
 }
 
 export class CampusEntity {
-    private readonly id: string;
-    private readonly name: string;
+	private readonly id: string;
+	private readonly name: string;
 
-    constructor(props: Props) {
-        this.id = props.id;
-        this.name = props.name;
-    }
+	constructor(props: Props) {
+		this.id = props.id;
+		this.name = props.name;
+	}
 
-    static fromObject(object: Record<string,any>) {
-        return new CampusEntity(object as Props)
-    }
+	static fromObject(object: Record<string, any>) {
+		return new CampusEntity(object as Props);
+	}
 }

@@ -1,15 +1,15 @@
-import { CreateSectionDto } from "../dtos/section/create.dto";
-import { UpdateSectionDto } from "../dtos/section/update.dto";
-import { InformationDto } from "../dtos/shared/information.dto";
-import { PaginationDto } from "../dtos/shared/pagination.dto";
-import { SectionEntity } from "../entities/section.entity";
-import { UserEntity } from "../entities/user.entity";
+import type { CreateSectionDto } from "../dtos/section/create.dto";
+import type { UpdateSectionDto } from "../dtos/section/update.dto";
+import type { PaginationDto } from "../dtos/shared/pagination.dto";
+import type { SectionEntity } from "../entities/section.entity";
+import type { UserEntity } from "../entities/user.entity";
 
 export interface ISectionDatasource {
-    getAll(pagination: PaginationDto, user: UserEntity): Promise<SectionEntity[]>,
-    getById(information: InformationDto): Promise<SectionEntity>,
-    getAllCount(user: UserEntity): Promise<number>,
-    create(sectionDto: CreateSectionDto): Promise<SectionEntity>,
-    update(sectionDto: UpdateSectionDto): Promise<SectionEntity>,
-    delete(information: InformationDto): Promise<void>
+	getAll(pagination: PaginationDto, user: UserEntity): Promise<SectionEntity[]>;
+	getAllChild(pagination: PaginationDto, id: string): Promise<SectionEntity[]>;
+	getById(id: string): Promise<SectionEntity>;
+	getAllCount(user: UserEntity): Promise<number>;
+	create(sectionDto: CreateSectionDto): Promise<SectionEntity>;
+	update(sectionDto: UpdateSectionDto): Promise<SectionEntity>;
+	delete(id: string): Promise<void>;
 }

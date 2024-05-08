@@ -1,15 +1,13 @@
-import { CreateCampusDto, ICampusDatasource } from "../../domain";
+import type { CreateCampusDto, ICampusDatasource } from "../../domain";
 
 export class CampusService {
-    constructor(
-        private readonly datasource: ICampusDatasource
-    ) { }
+	constructor(private readonly datasource: ICampusDatasource) {}
 
-    getAll() {
-        return this.datasource.getAll()
-    }
+	getAll() {
+		return this.datasource.getAll();
+	}
 
-    create(campusDto: CreateCampusDto) {
-        return this.datasource.create(campusDto);
-    }
+	create(campusDto: CreateCampusDto) {
+		return this.datasource.create(campusDto);
+	}
 }
