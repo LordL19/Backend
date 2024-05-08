@@ -1,28 +1,29 @@
 interface Props {
-    user: User,
-    chat: Chat[]
+	user: User;
+	chat: Chat[];
 }
 
 interface User {
-    name: string,
-    phone: string
+	name: string;
+	phone: string;
 }
 
 interface Chat {
-    from: string,
-    text: string
+	from: string;
+	text: string;
 }
 
 export class SendChatView {
+	static create(props: Props) {
+		const { user, chat } = props;
+		let bodyChat = "";
+		chat.forEach((item) => {
+			bodyChat += `<li style="margin-bottom: 6px;" ><strong>${
+				item.from === "user" ? "Usuario" : "Asistente"
+			}:</strong> ${item.text}</li>\n`;
+		});
 
-    static create(props: Props) {
-        const { user, chat } = props;
-        let bodyChat = "";
-        chat.forEach(item => {
-            bodyChat += `<li style="margin-bottom: 6px;" ><strong>${item.from === "user" ? "Usuario" : "Asistente"}:</strong> ${item.text}</li>\n`
-        })
-
-        return `
+		return `
         <!DOCTYPE html>
         <html lang="es">
         <head>
@@ -45,7 +46,6 @@ export class SendChatView {
         </div>
         </body>
         </html>
-        `
-
-    }
+        `;
+	}
 }

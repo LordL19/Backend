@@ -1,13 +1,12 @@
-import { UserEntity } from "../../domain";
+import type { UserEntity } from "../../domain";
 
 interface Props {
-  code: string,
-  user: UserEntity,
+	code: string;
+	user: UserEntity;
 }
 export class ResetPasswordView {
-
-  static create(props: Props) {
-    return `
+	static create(props: Props) {
+		return `
     <!DOCTYPE html>
     <html>
       <head>
@@ -47,6 +46,6 @@ export class ResetPasswordView {
         </div>
       </body>
     </html>
-        `
-  }
+        `;
+	}
 }

@@ -1,51 +1,96 @@
 import { SectionModel } from "../../../data";
-import { CreateSectionDto, ISectionDatasource, PaginationDto, ResponseError, SectionEntity, UpdateSectionDto, UserEntity } from "../../../domain";
-import { InformationDto } from "../../../domain/dtos/shared/information.dto";
+import {
+	type CreateSectionDto,
+	type ISectionDatasource,
+	type PaginationDto,
+	ResponseError,
+	SectionEntity,
+	type UpdateSectionDto,
+	type UserEntity,
+} from "../../../domain";
 
 export class SectionDatasource implements ISectionDatasource {
+	private async existsSectionWithId(id: string) {
+		const section = await SectionModel.findById(id);
+		if (!section)
+			throw ResponseError.notFound({
+				section: `Section with id ${id} not found.`,
+			});
+	}
 
-    private async existsSectionWithId(id: string) {
-        const user = await SectionModel.findById(id)
-        if (!user) throw ResponseError.notFound({ section: `Section with id ${id} not found.` });
-    }
+	private async existsSectionWithName(
+		name: string,
+		id_user: string,
+		id_parent: string,
+	) {
+		const section = await SectionModel.findOne({ name, id_user, id_parent });
+		if (section)
+			throw ResponseError.notFound({
+				section: `Section with name ${name} alredy exists.`,
+			});
+	}
 
-    private async existsSectionWithName(name: string) {
-        const user = await SectionModel.findOne({ name })
-        if (user) throw ResponseError.notFound({ section: `Section with name ${name} alredy exists.` });
-    }
+	async getAll(
+		pagination: PaginationDto,
+		user: UserEntity,
+	): Promise<SectionEntity[]> {
+		const sections = await SectionModel.find({
+			id_user: user.getId,
+			id_parent: null,
+		})
+			.skip((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit);
+		return sections.map(SectionEntity.fromObject);
+	}
 
-    async getAll(pagination: PaginationDto, user: UserEntity): Promise<SectionEntity[]> {
-        const sections = await SectionModel.find({ id_user: user.getId })
-            .skip((pagination.page - 1) * pagination.limit)
-            .limit(pagination.limit)
-        return sections.map(SectionEntity.fromObject);
-    }
+	async getAllChild(
+		pagination: PaginationDto,
+		id: string,
+	): Promise<SectionEntity[]> {
+		const sections = await SectionModel.find({ id_parent: id })
+			.skip((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit);
+		return sections.map(SectionEntity.fromObject);
+	}
 
-    async getById(information: InformationDto): Promise<SectionEntity> {
-        const section = await SectionModel.findById(information.id);
-        if (!section) throw ResponseError.notFound({ section: `Section with id ${information.id} not found.` })
-        return SectionEntity.fromObject(section);
-    }
+	async getById(id: string): Promise<SectionEntity> {
+		const section = await SectionModel.findById(id);
+		if (!section)
+			throw ResponseError.notFound({
+				section: `Section with id ${id} not found.`,
+			});
+		return SectionEntity.fromObject(section);
+	}
 
-    getAllCount(user: UserEntity): Promise<number> {
-        return SectionModel.find({ id_user: user.getId }).countDocuments();
-    }
+	getAllCount(user: UserEntity): Promise<number> {
+		return SectionModel.find({
+			id_user: user.getId,
+			id_parent: null,
+		}).countDocuments();
+	}
 
-    async create(sectionDto: CreateSectionDto): Promise<SectionEntity> {
-        await this.existsSectionWithName(sectionDto.name);
-        const section = await SectionModel.create(sectionDto);
-        return SectionEntity.fromObject(section);
-    }
+	async create(sectionDto: CreateSectionDto): Promise<SectionEntity> {
+		await this.existsSectionWithName(
+			sectionDto.name,
+			sectionDto.id_user,
+			sectionDto.id_parent!,
+		);
+		const section = await SectionModel.create(sectionDto);
+		return SectionEntity.fromObject(section);
+	}
 
-    async update(sectionDto: UpdateSectionDto): Promise<SectionEntity> {
-        await this.existsSectionWithId(sectionDto.id);
-        const sectionUpdate = await SectionModel.findByIdAndUpdate(sectionDto.id, sectionDto.values, { returnDocument: "after" });
-        return SectionEntity.fromObject(sectionUpdate!);
-    }
+	async update(sectionDto: UpdateSectionDto): Promise<SectionEntity> {
+		await this.existsSectionWithId(sectionDto.id);
+		const sectionUpdate = await SectionModel.findByIdAndUpdate(
+			sectionDto.id,
+			sectionDto.values,
+			{ returnDocument: "after" },
+		);
+		return SectionEntity.fromObject(sectionUpdate!);
+	}
 
-    async delete(information: InformationDto): Promise<void> {
-        await this.existsSectionWithId(information.id);
-        await SectionModel.updateOne({ _id: information.id }, { active: false });
-    }
-
+	async delete(id: string): Promise<void> {
+		await this.existsSectionWithId(id);
+		await SectionModel.updateOne({ _id: id }, { active: false });
+	}
 }

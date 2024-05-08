@@ -1,53 +1,46 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import {
-	CreateSectionDto,
+	CreateRecordDto,
 	InformationDto,
 	PaginationDto,
-	UpdateSectionDto,
+	UpdateRecordDto,
 } from "../../../../domain";
-import { SectionService } from "../../../services/section.service";
-import { Services } from "../../../services/services";
-import { SendChatView } from "../../../views/send-chat.view";
+import { RecordService } from "../../../services/record.service";
 
-export class SectionController {
-	constructor(private readonly service: SectionService) {}
+export class RecordController {
+	static _recordControllerInstance: RecordController;
+
+	constructor(private readonly service: RecordService) {}
 
 	getAll = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
+		const information = InformationDto.create(req.params);
 		this.service
-			.getAll(pagination, req.body.id_user)
+			.getAll(pagination, information)
 			.then((result) => res.json(result))
 			.catch((e) => next(e));
 	};
 
-	getTypes = (req: Request, res: Response) => {
-		res.json(this.service.getTypes());
-	};
-
 	getByID = (req: Request, res: Response, next: NextFunction) => {
-		const pagination = PaginationDto.create(req.query);
 		const information = InformationDto.create(req.params);
 		this.service
-			.getChildById(pagination, information)
+			.getById(information)
 			.then((result) => res.json(result))
 			.catch((e) => next(e));
 	};
 
 	create = (req: Request, res: Response, next: NextFunction) => {
-		const createSection = CreateSectionDto.create(req.body);
+		const recordDto = CreateRecordDto.create(req.body);
 		this.service
-			.create(createSection)
+			.create(recordDto)
 			.then((result) => res.json(result))
 			.catch((e) => next(e));
 	};
 
 	update = (req: Request, res: Response, next: NextFunction) => {
-		const updateSection = UpdateSectionDto.create({
-			...req.body,
-			id: req.params.id,
-		});
+		const recordDto = UpdateRecordDto.create({ ...req.body, ...req.params });
 		this.service
-			.update(updateSection)
+			.update(recordDto)
 			.then((result) => res.json(result))
 			.catch((e) => next(e));
 	};

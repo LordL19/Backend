@@ -1,16 +1,47 @@
-import { CampusDatasource, UserDatasource } from "../../infraestructure"
-import { SectionDatasource } from "../../infraestructure/datasources/mongo/section.datasource"
+import {
+	ICampusDatasource,
+	IRecordDatasource,
+	ISectionDatasource,
+	IUserDatasource,
+} from "../../domain";
+import {
+	CampusDatasource,
+	RecordDatasource,
+	SectionDatasource,
+	UserDatasource,
+} from "../../infraestructure";
 
 export class Datasources {
-    static get user() {
-        return new UserDatasource()
-    }
+	static _userInstace: IUserDatasource;
+	static _campusInstance: ICampusDatasource;
+	static _sectionInstace: ISectionDatasource;
+	static _recordInstace: IRecordDatasource;
 
-    static get campus() {
-        return new CampusDatasource()
-    }
+	static get user(): IUserDatasource {
+		if (!this._userInstace) {
+			this._userInstace = new UserDatasource();
+		}
+		return this._userInstace;
+	}
 
-    static get section() {
-        return new SectionDatasource()
-    }
+	static get campus(): ICampusDatasource {
+		if (!this._campusInstance) {
+			this._campusInstance = new CampusDatasource();
+		}
+		return this._campusInstance;
+	}
+
+	static get section(): ISectionDatasource {
+		if (!this._sectionInstace) {
+			this._sectionInstace = new SectionDatasource();
+		}
+		return this._sectionInstace;
+	}
+
+	static get record(): IRecordDatasource {
+		if (!this._recordInstace) {
+			this._recordInstace = new RecordDatasource();
+		}
+		return this._recordInstace;
+	}
 }

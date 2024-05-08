@@ -1,15 +1,15 @@
-import { model, Schema, Document } from 'mongoose';
+import { type Document, Schema, model } from "mongoose";
 
 interface ICampus extends Document {
-    name: string;
+	name: string;
 }
 
 const CampusSchema: Schema = new Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true
-    },
-})
+	name: {
+		type: String,
+		required: true,
+		unique: true,
+	},
+});
 
-export const CampusModel = model<ICampus>('campus', CampusSchema);
+export const CampusModel = model<ICampus>("campus", CampusSchema);

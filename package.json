@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --clear --env-file .env src/app.ts",
+    "format": "npx @biomejs/biome format --write ./src",
     "build": "rimraf dist && tsc",
     "start": "node dist/app.js"
   },
@@ -24,13 +25,14 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "env-var": "^7.4.1",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.4",
-    "nodemailer": "^6.9.8"
+    "bcrypt": "5.1.1",
+    "cookie-parser": "1.4.6",
+    "cors": "2.8.5",
+    "env-var": "7.4.1",
+    "express": "4.18.2",
+    "express-rate-limit": "7.2.0",
+    "jsonwebtoken": "9.0.2",
+    "mongoose": "8.0.4",
+    "nodemailer": "6.9.8"
   }
 }

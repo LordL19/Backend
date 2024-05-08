@@ -2,34 +2,40 @@ import { DtoValidation } from "../../validations/dto.validation";
 import { InformationDto, PropsInformation } from "../shared/information.dto";
 
 interface Props extends PropsInformation {
-    name: string,
-    last_name: string,
+	name: string;
+	last_name: string;
 }
 
 export class UpdateUserDto extends InformationDto {
-    public name: string;
-    public last_name: string;
+	public name: string;
+	public last_name: string;
 
-    constructor(props: Props) {
-        super(props);
-        this.name = props.name;
-        this.last_name = props.last_name;
-    }
+	constructor(props: Props) {
+		super(props);
+		this.name = props.name;
+		this.last_name = props.last_name;
+	}
 
-    get values() {
-        const obj: Record<string, any> = {};
+	get values() {
+		const obj: Record<string, any> = {};
 
-        if (this.name) obj.name = this.name;
-        if (this.last_name) obj.last_name = this.last_name;
+		if (this.name) obj.name = this.name;
+		if (this.last_name) obj.last_name = this.last_name;
 
-        return obj;
-    }
+		return obj;
+	}
 
-    static create(object: Record<string, any>): UpdateUserDto {
-        const id = DtoValidation.get(object.id_user, "Id").required().asString().value();
-        const name = object.name && DtoValidation.get(object.name, "Name").asString().value();
-        const last_name = object.last_name && DtoValidation.get(object.last_name, "Last_name").asString().value();
+	static create(object: Record<string, any>): UpdateUserDto {
+		const id = DtoValidation.get(object.id_user, "Id")
+			.required()
+			.asString()
+			.value();
+		const name =
+			object.name && DtoValidation.get(object.name, "Name").asString().value();
+		const last_name =
+			object.last_name &&
+			DtoValidation.get(object.last_name, "Last_name").asString().value();
 
-        return new UpdateUserDto({ id, name: name!, last_name: last_name! });
-    }
+		return new UpdateUserDto({ id, name: name!, last_name: last_name! });
+	}
 }
