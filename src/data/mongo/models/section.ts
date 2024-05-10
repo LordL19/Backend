@@ -26,7 +26,7 @@ const SectionSchema: Schema = new Schema({
 			},
 			type: {
 				type: String,
-				enum: ["text", "number", "date"],
+				enum: ["text", "number", "date", "datetime","time","checkbox"],
 				required: true,
 			},
 		},
