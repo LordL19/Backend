@@ -18,6 +18,10 @@ const SectionSchema: Schema = new Schema({
 		type: Boolean,
 		default: true,
 	},
+	public: {
+		type: Boolean,
+		required: true
+	},
 	fields: [
 		{
 			name: {
@@ -26,7 +30,7 @@ const SectionSchema: Schema = new Schema({
 			},
 			type: {
 				type: String,
-				enum: ["text", "number", "date", "datetime","time","checkbox"],
+				enum: ["text", "number", "date", "datetime", "time", "checkbox"],
 				required: true,
 			},
 		},

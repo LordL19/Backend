@@ -1,11 +1,13 @@
 import {
 	ICampusDatasource,
+	IQueryDatasource,
 	IRecordDatasource,
 	ISectionDatasource,
 	IUserDatasource,
 } from "../../domain";
 import {
 	CampusDatasource,
+	QueryDatasource,
 	RecordDatasource,
 	SectionDatasource,
 	UserDatasource,
@@ -16,6 +18,7 @@ export class Datasources {
 	static _campusInstance: ICampusDatasource;
 	static _sectionInstace: ISectionDatasource;
 	static _recordInstace: IRecordDatasource;
+	static _queryDatasource: IQueryDatasource;
 
 	static get user(): IUserDatasource {
 		if (!this._userInstace) {
@@ -43,5 +46,12 @@ export class Datasources {
 			this._recordInstace = new RecordDatasource();
 		}
 		return this._recordInstace;
+	}
+
+	static get query(): IQueryDatasource {
+		if (!this._queryDatasource) {
+			this._queryDatasource = new QueryDatasource();
+		}
+		return this._queryDatasource;
 	}
 }

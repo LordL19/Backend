@@ -3,17 +3,21 @@ import { Datasources } from "../datasources/datasources";
 import { AuthService } from "./auth.service";
 import { CampusService } from "./campus.service";
 import { EmailService } from "./email.service";
+import { QueryService } from "./query.service";
 import { RecordService } from "./record.service";
 import { SectionService } from "./section.service";
+import { StorageService } from "./storage.service";
 import { UserService } from "./user.service";
 
 export class Services {
 	private static _authInstance: AuthService;
 	private static _emailInstance: EmailService;
 	private static _campusInstance: CampusService;
+	private static _queryService: QueryService;
 	private static _userInstance: UserService;
 	private static _sectionInstance: SectionService;
 	private static _recordInstance: RecordService;
+	private static _storageInstance: StorageService;
 
 	static get auth() {
 		if (!this._authInstance) {
@@ -65,5 +69,22 @@ export class Services {
 			);
 		}
 		return this._recordInstance;
+	}
+
+	static get storage() {
+		if (!this._storageInstance) {
+			this._storageInstance = new StorageService({
+				bucket: envs.BUCKET_STORAGE,
+				key: envs.KEY_STORAGE
+			});
+		}
+		return this._storageInstance;
+	}
+
+	static get query() {
+		if (!this._queryService) {
+			this._queryService = new QueryService(Datasources.query);
+		}
+		return this._queryService;
 	}
 }

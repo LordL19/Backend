@@ -13,7 +13,6 @@ export class LoginDto {
 			.value();
 		const password = DtoValidation.get(object.password, "Password")
 			.required()
-			.asPassword(6)
 			.value();
 		return new LoginDto(email, password);
 	}

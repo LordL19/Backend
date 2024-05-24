@@ -14,27 +14,23 @@ export class SectionUtils {
 		value.forEach((item, index) => {
 			if (!item.name || !item.type)
 				throw ResponseError.badRequest({
-					[valueNameLowerCase]: `The item ${
-						index + 1
-					} of ${valueName}, name or type is required`,
+					[valueNameLowerCase]: `The item ${index + 1
+						} of ${valueName}, name or type is required`,
 				});
 			if (typeof item.name !== "string")
 				throw ResponseError.badRequest({
-					[valueNameLowerCase]: `The item ${
-						index + 1
-					} of ${valueName}, property name not a string.`,
+					[valueNameLowerCase]: `The item ${index + 1
+						} of ${valueName}, property name not a string.`,
 				});
 			if (typeof item.type !== "string")
 				throw ResponseError.badRequest({
-					[valueNameLowerCase]: `The item ${
-						index + 1
-					} of ${valueName}, property type not a string.`,
+					[valueNameLowerCase]: `The item ${index + 1
+						} of ${valueName}, property type not a string.`,
 				});
 			if (!(item.type in FieldType))
 				throw ResponseError.badRequest({
-					[valueNameLowerCase]: `The item ${
-						index + 1
-					} of ${valueName}, property type is not valid ${KeysFieldType.toString()}.`,
+					[valueNameLowerCase]: `The item ${index + 1
+						} of ${valueName}, property type is not valid ${KeysFieldType.toString()}.`,
 				});
 		});
 		return value as Field[];

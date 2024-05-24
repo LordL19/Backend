@@ -104,12 +104,12 @@ export class DtoValidation {
 	}
 
 	static asBoolean(value: string, valueName: string) {
-		if (value !== "true" && value !== "false")
+		if (typeof value !== "boolean")
 			throw ResponseError.badRequest({
-				[valueName]: `${valueName} must be 'true' or 'false'.`,
+				[valueName]: `${valueName} must be boolean.`,
 			});
 		return {
-			value: () => value === "true",
+			value: () => value as boolean,
 		};
 	}
 
@@ -117,6 +117,10 @@ export class DtoValidation {
 		if (typeof value !== "object" || Array.isArray(value))
 			throw ResponseError.badRequest({
 				[valueName]: `${valueName} must be an object`,
+			});
+		if (Object.keys(value!).length === 0)
+			throw ResponseError.badRequest({
+				[valueName]: `${valueName} cannot be empty`,
 			});
 		return {
 			value: () => value as Record<string, any>,

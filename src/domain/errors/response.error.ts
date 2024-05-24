@@ -10,8 +10,8 @@ export class ResponseError extends Error {
 		return new ResponseError(400, data);
 	}
 
-	static unauthorized(data: Record<string, string> | string) {
-		return new ResponseError(401, data);
+	static unauthorized(data: string = "You are not allowed to perform this action.") {
+		return new ResponseError(401, { auth: data });
 	}
 
 	static forbidden(error: Record<string, string>) {

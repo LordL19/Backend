@@ -2,6 +2,7 @@ import { type Document, Schema, model } from "mongoose";
 import { text } from "stream/consumers";
 
 interface IUser extends Document {
+	img_url: string
 	name: string;
 	last_name: string;
 	full_name: string;
@@ -12,11 +13,14 @@ interface IUser extends Document {
 	created_at: Date;
 	updated_at: Date;
 	id_campus: Schema.Types.ObjectId;
-	type: "visitor" | "student" | "moderator" | "administrator";
+	type: "student" | "moderator" | "administrator";
 }
 
 const UserSchema = new Schema(
 	{
+		img_url: {
+			type: String,
+		},
 		name: {
 			type: String,
 			required: true,
@@ -53,7 +57,7 @@ const UserSchema = new Schema(
 		},
 		type: {
 			type: String,
-			enum: ["visitor", "student", "moderator", "administrator"],
+			enum: ["student", "moderator", "administrator"],
 			required: true,
 		},
 	},

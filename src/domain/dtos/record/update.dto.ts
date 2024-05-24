@@ -4,16 +4,19 @@ import { RecordUtils } from "./utils";
 
 interface Props {
 	id: string;
+	public: boolean;
 	data: Record<string, Value>;
 	updated_by: string;
 }
 
 export class UpdateRecordDto {
 	public readonly id: string;
+	public readonly public: boolean;
 	public readonly data: Record<string, Value>;
 	public readonly updated_by: string;
 	public constructor(props: Props) {
 		this.id = props.id;
+		this.public = props.public;
 		this.data = props.data;
 		this.updated_by = props.updated_by;
 	}
@@ -21,6 +24,7 @@ export class UpdateRecordDto {
 	get values() {
 		const obj: Record<string, any> = {};
 		if (this.data) obj.data = this.data;
+		if (this.public !== undefined && this.public !== null) obj.public = this.public;
 		if (this.updated_by) obj.updated_by = this.updated_by;
 
 		return obj;
@@ -32,12 +36,13 @@ export class UpdateRecordDto {
 			.required()
 			.asString()
 			.value();
+		const publicRecord = object.public && DtoValidation.asBoolean(object.public, "Public").value()
 		const data =
 			object.data &&
 			RecordUtils.ValidatePropertiesOfData(
 				object.fields,
 				DtoValidation.get(object.data, "Data").required().asObject().value(),
 			);
-		return new UpdateRecordDto({ id, data, updated_by });
+		return new UpdateRecordDto({ id, public: publicRecord, data, updated_by });
 	}
 }

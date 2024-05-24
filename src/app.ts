@@ -8,7 +8,7 @@ import { AppRouter, Server } from "./presentation";
 
 async function main() {
 	await new MongoDatabase(envs.MONGO_URL, envs.MONGO_DB).start();
-
+	
 	new Server({
 		port: envs.PORT,
 		router: [AppRouter.v1],

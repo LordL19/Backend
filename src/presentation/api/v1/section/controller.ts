@@ -6,8 +6,6 @@ import {
 	UpdateSectionDto,
 } from "../../../../domain";
 import { SectionService } from "../../../services/section.service";
-import { Services } from "../../../services/services";
-import { SendChatView } from "../../../views/send-chat.view";
 
 export class SectionController {
 	constructor(private readonly service: SectionService) {}

@@ -6,6 +6,10 @@ const RecordSchema: Schema = new Schema(
 			type: Object,
 			required: true,
 		},
+		public: {
+			type: Boolean,
+			required: true
+		},
 		created_by: {
 			type: Schema.Types.ObjectId,
 			ref: "users",
