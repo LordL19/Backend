@@ -51,21 +51,6 @@ export class UserEntity {
 		this.id_campus = props.id_campus;
 	}
 
-	get getData() {
-		return {
-			id: this.id,
-			name: this.name,
-			image_url: this.image_url,
-			last_name: this.last_name,
-			full_name: this.full_name,
-			type: this.type,
-			email: this.email,
-			created_at: this.created_at,
-			updated_at: this.updated_at,
-			id_campus: this.id_campus,
-		};
-	}
-
 	get getBasicData() {
 		return {
 			id: this.id,
@@ -73,6 +58,7 @@ export class UserEntity {
 			name: this.name,
 			last_name: this.last_name,
 			email: this.email,
+			id_campus: this.id_campus,
 			validated_email: this.validated_email
 		}
 	}

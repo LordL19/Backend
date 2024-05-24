@@ -18,7 +18,7 @@ interface IUser extends Document {
 
 const UserSchema = new Schema(
 	{
-		img_url: {
+		image_url: {
 			type: String,
 		},
 		name: {

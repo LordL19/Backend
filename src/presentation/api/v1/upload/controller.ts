@@ -6,7 +6,6 @@ export class StorageController {
 	constructor(private readonly service: StorageService) {}
 
 	generate = (req: Request, res: Response, next: NextFunction) => {
-		console.log(req.body)
 		const fileUpload = UploadDto.create(req.body);
 		this.service
 			.generateUrlToUpload(fileUpload)

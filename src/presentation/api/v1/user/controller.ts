@@ -8,7 +8,7 @@ import {
 import type { UserService } from "../../../services/user.service";
 
 export class UserController {
-	constructor(private readonly service: UserService) {}
+	constructor(private readonly service: UserService) { }
 
 	getAll = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
@@ -23,7 +23,7 @@ export class UserController {
 		const information = InformationDto.create(req.body);
 		this.service
 			.getById(information)
-			.then((result) => res.json(result.getData))
+			.then((result) => res.json(result.getBasicData))
 			.catch((e) => next(e));
 	};
 
@@ -31,7 +31,7 @@ export class UserController {
 		const updateUserDto = UpdateUserDto.create(req.body);
 		this.service
 			.update(updateUserDto)
-			.then((result) => res.json(result.getData))
+			.then((result) => res.json(result.getBasicData))
 			.catch((e) => next(e));
 	};
 
