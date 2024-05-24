@@ -6,7 +6,6 @@ import {
 	ResponseError,
 	SectionEntity,
 	type UpdateSectionDto,
-	type UserEntity,
 } from "../../../domain";
 
 export class SectionDatasource implements ISectionDatasource {
@@ -30,14 +29,8 @@ export class SectionDatasource implements ISectionDatasource {
 			});
 	}
 
-	async getAll(
-		pagination: PaginationDto,
-		user: UserEntity,
-	): Promise<SectionEntity[]> {
-		const sections = await SectionModel.find({
-			id_user: user.getId,
-			id_parent: null,
-		})
+	async getAll(pagination: PaginationDto, filter: Record<string, any>): Promise<SectionEntity[]> {
+		const sections = await SectionModel.find(filter)
 			.skip((pagination.page - 1) * pagination.limit)
 			.limit(pagination.limit);
 		return sections.map(SectionEntity.fromObject);
@@ -62,11 +55,8 @@ export class SectionDatasource implements ISectionDatasource {
 		return SectionEntity.fromObject(section);
 	}
 
-	getAllCount(user: UserEntity): Promise<number> {
-		return SectionModel.find({
-			id_user: user.getId,
-			id_parent: null,
-		}).countDocuments();
+	getAllCount(filter: Record<string, any>): Promise<number> {
+		return SectionModel.find(filter).countDocuments();
 	}
 
 	async create(sectionDto: CreateSectionDto): Promise<SectionEntity> {

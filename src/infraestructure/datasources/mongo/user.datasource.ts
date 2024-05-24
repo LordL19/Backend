@@ -43,7 +43,7 @@ export class UserDatasource implements IUserDatasource {
 		};
 	}
 	async getById(id: string): Promise<UserEntity> {
-		const user = await UserModel.findById(id).populate(["id_campus"]);
+		const user = await UserModel.findById(id).populate([{ path: "id_campus", select: ["name"] }]);
 		if (!user)
 			throw ResponseError.notFound({ user: `User with id ${id} not found.` });
 		return UserEntity.fromObject(user);

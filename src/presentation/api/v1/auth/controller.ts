@@ -10,13 +10,12 @@ import { ResetPasswordDto } from "../../../../domain/dtos/auth/reset-password.dt
 import { type AuthService, TypeEmail } from "../../../services/auth.service";
 
 export class AuthController {
-	constructor(private readonly service: AuthService) {}
+	constructor(private readonly service: AuthService) { }
 
 	private configCookie(expire: Date) {
 		return {
 			httpOnly: true,
-			sameSite: "none",
-			secure: true,
+			sameSite: "lax",
 			expires: expire,
 		} as CookieOptions;
 	}
@@ -48,6 +47,15 @@ export class AuthController {
 			})
 			.catch((e) => next(e));
 	}
+
+	generateVisitToken = (req: Request, res: Response, next: NextFunction) => {
+		this.service.visitToken()
+			.then((token) => {
+				res.cookie("token", token.data, this.configCookie(token.expire));
+				res.json({ token:token.data });	
+			})
+			.catch((e) => next(e));
+	};
 
 	logout = (req: Request, res: Response) => {
 		res.clearCookie("token");

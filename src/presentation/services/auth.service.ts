@@ -27,7 +27,7 @@ export class AuthService {
 	constructor(
 		private readonly datasource: IUserDatasource,
 		private readonly emailService: EmailService,
-	) {}
+	) { }
 
 	async validateEmail(information: InformationDto) {
 		await this.datasource.validateEmail(information.id_user);
@@ -58,7 +58,6 @@ export class AuthService {
 			token,
 		};
 	}
-
 	async login(loginDto: LoginDto) {
 		const user = await this.datasource.getByEmail(loginDto.email);
 		const isPassword = await bcrypt.compare(
@@ -79,11 +78,7 @@ export class AuthService {
 			),
 		};
 		return {
-			user: {
-				name: user.getName,
-				email: user.getEmail,
-				validated_email: user.getValidatedEmail,
-			},
+			user: user.getBasicData,
 			token,
 		};
 	}
@@ -99,10 +94,7 @@ export class AuthService {
 			TypeEmail.validationEmail,
 		);
 		return {
-			user: {
-				name: user.getName,
-				email: user.getEmail,
-			},
+			user: user.getBasicData,
 			token,
 			code,
 		};
@@ -149,5 +141,13 @@ export class AuthService {
 			token: tokenOutput,
 			code: codeOutput,
 		};
+	}
+
+	async visitToken() {
+		const token = {
+			data: await jwt.generateToken({ visit: true }),
+			expire: new Date(Date.now() + 10 * 60 * 1000)
+		}
+		return token;
 	}
 }

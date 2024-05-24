@@ -1,5 +1,4 @@
 export enum Type {
-	visitor = "visitor",
 	student = "student",
 	moderator = "moderator",
 	administrator = "administrator",
@@ -7,6 +6,7 @@ export enum Type {
 
 interface Props {
 	id: string;
+	image_url: string,
 	name: string;
 	last_name: string;
 	full_name: string;
@@ -22,6 +22,7 @@ interface Props {
 
 export class UserEntity {
 	private readonly id: string;
+	private readonly image_url: string;
 	private readonly name: string;
 	private readonly last_name: string;
 	private readonly full_name: string;
@@ -37,6 +38,7 @@ export class UserEntity {
 	constructor(props: Props) {
 		this.id = props.id;
 		this.name = props.name;
+		this.image_url = props.image_url;
 		this.last_name = props.last_name;
 		this.full_name = props.full_name;
 		this.password = props.password;
@@ -53,12 +55,26 @@ export class UserEntity {
 		return {
 			id: this.id,
 			name: this.name,
+			image_url: this.image_url,
 			last_name: this.last_name,
 			full_name: this.full_name,
+			type: this.type,
 			email: this.email,
 			created_at: this.created_at,
+			updated_at: this.updated_at,
 			id_campus: this.id_campus,
 		};
+	}
+
+	get getBasicData() {
+		return {
+			id: this.id,
+			image_url: this.image_url || null,
+			name: this.name,
+			last_name: this.last_name,
+			email: this.email,
+			validated_email: this.validated_email
+		}
 	}
 
 	get getId() {
@@ -71,6 +87,10 @@ export class UserEntity {
 
 	get getEmail() {
 		return this.email;
+	}
+
+	get getType() {
+		return this.type;
 	}
 
 	get getPassword() {

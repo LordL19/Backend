@@ -8,28 +8,31 @@ export class AuthRouter {
 		const controller = new AuthController(Services.auth);
 		const auth = Router();
 
+		auth.get("/visit", controller.generateVisitToken);
 		auth.get("/logout", controller.logout);
 
 		auth.post("/send-verification-code", controller.sendVerificationCode);
 		auth.post("/send-reset-code", controller.sendResetPasswordCode);
-		auth.post(
-			"/verify-code",
-			[AuthMiddleware.VerifyUser, AuthMiddleware.ValidateCode],
-			controller.verifyCode,
-		);
-
+		
 		auth.post("/login", controller.login);
 		auth.post("/register", controller.register);
-
+		
+		
+		auth.use(AuthMiddleware.VerifyUser);
+		auth.get(
+			"/validate-email",
+			[AuthMiddleware.ValidateUserWithCode],
+			controller.validateEmail,
+		);
+		auth.post(
+			"/verify-code",
+			[AuthMiddleware.ValidateCode],
+			controller.verifyCode,
+		);
 		auth.post(
 			"/reset-password",
 			[AuthMiddleware.ValidateUserWithCode],
 			controller.resetPassword,
-		);
-		auth.post(
-			"/validate-email",
-			[AuthMiddleware.ValidateUserWithCode],
-			controller.validateEmail,
 		);
 
 		return auth;

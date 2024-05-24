@@ -1,17 +1,29 @@
 import type { NextFunction, Request, Response } from "express";
 import { Jwt } from "../../helpers";
 import { ResponseError } from "../../domain";
+import { emitWarning } from "process";
 
 const jwt = Jwt;
 export class AuthMiddleware {
 	static getToken(req: Request) {
 		const auth = req.cookies.token ?? req.headers.authorization ?? null;
-		if (!auth)
-			throw ResponseError.badRequest({
-				auth: "Authentication token not provided.",
-			});
+		if (!auth) throw ResponseError.badRequest({ auth: "Authentication token not provided." });
 		if (!auth.startsWith("Bearer ")) return auth;
 		return auth.split(" ")[1];
+	}
+
+	static async ValidateVisit(req: Request, res: Response, next: NextFunction) {
+		try {
+			const token = AuthMiddleware.getToken(req);
+			const payload = await jwt.verifyToken<{ id: String, visit: boolean }>(token);
+			if (!payload.visit && !payload.id) throw ResponseError.unauthorized();
+			if (payload.id) {
+				req.body.id_user = payload.id;
+			}
+			next();
+		} catch (error) {
+			next(error);
+		}
 	}
 
 	static async ValidateUser(req: Request, res: Response, next: NextFunction) {
@@ -21,12 +33,8 @@ export class AuthMiddleware {
 				id: number;
 				validatedEmail: boolean;
 			}>(token);
-			if (!payload.validatedEmail)
-				return res.status(400).json({
-					error: {
-						auth: "Your account required validation of email.",
-					},
-				});
+			if (!payload.id) throw ResponseError.unauthorized()
+			if (!payload.validatedEmail) throw ResponseError.unauthorized("Your account required validation of email.");
 			req.body.id_user = payload.id;
 			next();
 		} catch (error) {
@@ -38,6 +46,7 @@ export class AuthMiddleware {
 		try {
 			const token = AuthMiddleware.getToken(req);
 			const payload = await jwt.verifyToken<{ id: number }>(token);
+			if (!payload.id) throw ResponseError.unauthorized("The time has expired to perform this action.")
 			req.body.id_user = payload.id;
 			next();
 		} catch (error) {
@@ -56,12 +65,7 @@ export class AuthMiddleware {
 				id: number;
 				validatedCode: boolean;
 			}>(token);
-			if (!payload.validatedCode)
-				return res.status(400).json({
-					error: {
-						auth: "You must verify the code before performing this process.",
-					},
-				});
+			if (!payload.validatedCode) throw ResponseError.unauthorized("You must verify the code before performing this process.");
 			req.body.id_user = payload.id;
 			next();
 		} catch (error) {
