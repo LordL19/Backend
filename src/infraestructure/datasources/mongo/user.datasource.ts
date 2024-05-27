@@ -31,8 +31,8 @@ export class UserDatasource implements IUserDatasource {
 		search: SearchDto,
 	): Promise<SearchUsers> {
 		const [total, foundUsers] = await Promise.all([
-			UserModel.find({ $text: { $search: search.value } }).countDocuments(),
-			UserModel.find({ $text: { $search: search.value } })
+			UserModel.find({ full_name: { $regex: search.value, $options: "i" } }).countDocuments(),
+			UserModel.find({ full_name: { $regex: search.value, $options: "i" } })
 				.skip((pagination.page - 1) * pagination.limit)
 				.limit(pagination.limit),
 		]);

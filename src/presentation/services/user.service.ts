@@ -7,10 +7,14 @@ import type {
 import { SearchDto } from "../../domain/dtos/shared/search.dto";
 
 export class UserService {
-	constructor(private readonly datasource: IUserDatasource) {}
+	constructor(private readonly datasource: IUserDatasource) { }
 
-	getAll(pagination: PaginationDto, search: SearchDto) {
-		return this.datasource.getAll(pagination, search);
+	async getAll(pagination: PaginationDto, search: SearchDto) {
+		const { users, ...more } = await this.datasource.getAll(pagination, search);
+		return {
+			...more,
+			data: users.map(item => item.getBasicData)
+		}
 	}
 
 	getById(information: InformationDto) {

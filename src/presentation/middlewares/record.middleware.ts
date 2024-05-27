@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { type InformationDto, ResponseError } from "../../domain";
+import { type InformationDto } from "../../domain";
 import { Services } from "../services/services";
 
 export class RecordMiddleware {
