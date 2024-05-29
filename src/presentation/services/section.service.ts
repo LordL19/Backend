@@ -7,6 +7,8 @@ import {
 	type PaginationDto,
 	Type,
 	type UpdateSectionDto,
+	UserEntity,
+	VisibilityType,
 } from "../../domain";
 import type { UserService } from "./user.service";
 
@@ -16,19 +18,38 @@ export class SectionService {
 		private readonly service: UserService,
 	) { }
 
-	async getAll(pagination: PaginationDto, idUser: string) {
-		const user = idUser ? await this.service.getById({ id: idUser } as InformationDto) : null
+	private buildFilter(user: UserEntity | null) {
 		const filter: Record<string, any> = {
-			id_parent: null
+			id_parent: null,
+			active: true
 		};
 		if (!user) {
-			filter.public = true;
-		} else if (user.getId && user.getType !== Type.student) {
-			filter.$or = [
-				{ id_user: idUser },
-				{ moderators: { $in: [idUser] } }
-			];
-		};
+			filter.visibility = VisibilityType.all;
+			return filter;
+		}
+		switch (user.getType) {
+			case Type.student:
+				filter.visibility = {
+					$ne: VisibilityType.administration
+				}
+				break;
+			case Type.administrator:
+				filter.$or = [
+					{ visibility: { $in: [VisibilityType.all, VisibilityType.students] } },
+					{ id_user: user.getId },
+					{
+						visibility: VisibilityType.administration,
+						moderators: { $in: [user.getId] }
+					}
+				];
+				break;
+		}
+		return filter;
+	}
+
+	async getAll(pagination: PaginationDto, idUser: string) {
+		const user = idUser ? await this.service.getById({ id: idUser } as InformationDto) : null
+		const filter = this.buildFilter(user);
 		const [total, data] = await Promise.all([
 			this.datasource.getAllCount(filter),
 			this.datasource.getAll(pagination, filter),

@@ -1,22 +1,24 @@
 import type { Value } from "../../entities/record.entity";
+import { VisibilityType } from "../../entities/section.entity";
+import { ResponseError } from "../../errors/response.error";
 import { DtoValidation } from "../../validations/dto.validation";
 import { RecordUtils } from "./utils";
 
 interface Props {
 	id: string;
-	public: boolean;
+	visibility: VisibilityType;
 	data: Record<string, Value>;
 	updated_by: string;
 }
 
 export class UpdateRecordDto {
 	public readonly id: string;
-	public readonly public: boolean;
+	public readonly visibility: VisibilityType;
 	public readonly data: Record<string, Value>;
 	public readonly updated_by: string;
 	public constructor(props: Props) {
 		this.id = props.id;
-		this.public = props.public;
+		this.visibility = props.visibility;
 		this.data = props.data;
 		this.updated_by = props.updated_by;
 	}
@@ -24,7 +26,7 @@ export class UpdateRecordDto {
 	get values() {
 		const obj: Record<string, any> = {};
 		if (this.data) obj.data = this.data;
-		if (this.public !== undefined && this.public !== null) obj.public = this.public;
+		if (this.visibility) obj.visibility = this.visibility;
 		if (this.updated_by) obj.updated_by = this.updated_by;
 
 		return obj;
@@ -36,13 +38,19 @@ export class UpdateRecordDto {
 			.required()
 			.asString()
 			.value();
-		const publicRecord = object.public && DtoValidation.asBoolean(object.public, "Public").value()
+
+		let visibility;
+		if (object.visibility) {
+			visibility = DtoValidation.get(object.visibility, "Visibility").asString().value();
+			if (!(visibility in VisibilityType)) throw ResponseError.badRequest({ visibility: `The value is not valid of types ${Object.values(VisibilityType).toString()}` });
+		}
+
 		const data =
 			object.data &&
 			RecordUtils.ValidatePropertiesOfData(
 				object.fields,
 				DtoValidation.get(object.data, "Data").required().asObject().value(),
 			);
-		return new UpdateRecordDto({ id, public: publicRecord, data, updated_by });
+		return new UpdateRecordDto({ id, visibility: visibility as VisibilityType, data, updated_by });
 	}
 }

@@ -18,8 +18,9 @@ const SectionSchema: Schema = new Schema({
 		type: Boolean,
 		default: true,
 	},
-	public: {
-		type: Boolean,
+	visibility: {
+		type: String,
+		enum: ["all", "students", "administration"],
 		required: true
 	},
 	fields: [

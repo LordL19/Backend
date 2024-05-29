@@ -4,21 +4,59 @@ import {
 	IRecordDatasource,
 	Pagination,
 	PaginationDto,
+	SectionEntity,
+	Type,
 	UpdateRecordDto,
+	UserEntity,
+	VisibilityType,
 } from "../../domain";
 import { SectionService } from "./section.service";
+import { UserService } from "./user.service";
 
 export class RecordService {
 	constructor(
 		private readonly datasource: IRecordDatasource,
-		private readonly service: SectionService,
-	) {}
+		private readonly sectionService: SectionService,
+		private readonly userService: UserService,
+	) { }
+
+	private buildFilter(user: UserEntity | null, section: SectionEntity) {
+		const filter: Record<string, any> = {
+			id_section: section.getId
+		};
+		if (!user) {
+			filter.visibility = VisibilityType.all;
+			return filter;
+		}
+		switch (user.getType) {
+			case Type.student:
+				filter.visibility = {
+					$ne: VisibilityType.administration
+				}
+				break;
+			case Type.administrator:
+				if (section.getIdUser !== user.getId && !section.getModerators.includes(user.getId)) {
+					filter.visibility = {
+						$ne: VisibilityType.administration
+					}
+				}
+				break;
+		}
+		return filter;
+
+	}
 
 	async getAll(pagination: PaginationDto, information: InformationDto) {
-		const section = await this.service.getById(information);
+		const [user, section] = information.id_user
+			? await Promise.all([
+				this.userService.getById({ id: information.id_user } as InformationDto),
+				this.sectionService.getById(information)
+			])
+			: [null, await this.sectionService.getById(information)];
+		const filter = this.buildFilter(user, section);
 		const [limit, records] = await Promise.all([
-			this.datasource.getAllCount(section),
-			this.datasource.getAll(pagination, section),
+			this.datasource.getAllCount(filter),
+			this.datasource.getAll(pagination, filter),
 		]);
 		return Pagination.create(
 			pagination,
