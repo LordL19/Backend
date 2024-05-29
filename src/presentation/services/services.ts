@@ -66,6 +66,7 @@ export class Services {
 			this._recordInstance = new RecordService(
 				Datasources.record,
 				Services.section,
+				Services.user
 			);
 		}
 		return this._recordInstance;

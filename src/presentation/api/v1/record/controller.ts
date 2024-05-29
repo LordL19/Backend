@@ -10,11 +10,11 @@ import { RecordService } from "../../../services/record.service";
 export class RecordController {
 	static _recordControllerInstance: RecordController;
 
-	constructor(private readonly service: RecordService) {}
+	constructor(private readonly service: RecordService) { }
 
 	getAll = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
-		const information = InformationDto.create(req.params);
+		const information = InformationDto.create({ ...req.params, ...req.body });
 		this.service
 			.getAll(pagination, information)
 			.then((result) => res.json(result))

@@ -6,8 +6,9 @@ const RecordSchema: Schema = new Schema(
 			type: Object,
 			required: true,
 		},
-		public: {
-			type: Boolean,
+		visibility: {
+			type: String,
+			enum: ["all", "students", "administration"],
 			required: true
 		},
 		created_by: {

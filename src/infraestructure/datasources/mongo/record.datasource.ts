@@ -10,6 +10,7 @@ import {
 import { UpdateRecordDto } from "../../../domain/dtos/record/update.dto";
 
 export class RecordDatasource implements IRecordDatasource {
+
 	private async existsRecordWithId(id: string) {
 		const record = await RecordModel.findById(id);
 		if (!record)
@@ -20,9 +21,9 @@ export class RecordDatasource implements IRecordDatasource {
 
 	async getAll(
 		pagination: PaginationDto,
-		section: SectionEntity,
+		filter: Record<string, any>,
 	): Promise<RecordEntity[]> {
-		const records = await RecordModel.find({ id_section: section.getId })
+		const records = await RecordModel.find(filter)
 			.skip((pagination.page - 1) * pagination.limit)
 			.limit(pagination.limit)
 			.populate([
@@ -44,8 +45,8 @@ export class RecordDatasource implements IRecordDatasource {
 		return RecordEntity.fromObject(record);
 	}
 
-	getAllCount(section: SectionEntity): Promise<number> {
-		return RecordModel.find({ id_section: section.getId }).countDocuments();
+	getAllCount(filter: Record<string, any>): Promise<number> {
+		return RecordModel.find(filter).countDocuments();
 	}
 
 	async create(recordDto: CreateRecordDto): Promise<RecordEntity> {

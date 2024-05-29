@@ -1,7 +1,10 @@
+import { VisibilityType } from "./section.entity";
+
 export type Value = string | number | Date | boolean;
 interface Props {
 	id: string;
 	data: Record<string, Value>;
+	visibility: VisibilityType;
 	id_section: string;
 	id_campus: string;
 	created_by: string;
@@ -13,6 +16,7 @@ interface Props {
 export class RecordEntity {
 	private readonly id: string;
 	private readonly data: Record<string, Value>;
+	private readonly visibility: VisibilityType;
 	private readonly id_section: string;
 	private readonly created_by: string;
 	private readonly updated_by: string;
@@ -23,6 +27,7 @@ export class RecordEntity {
 	constructor(props: Props) {
 		this.id = props.id;
 		this.data = props.data;
+		this.visibility = props.visibility;
 		this.id_section = props.id_section;
 		this.created_by = props.created_by;
 		this.created_by = props.created_by;

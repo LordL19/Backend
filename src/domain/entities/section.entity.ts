@@ -8,6 +8,12 @@ export enum FieldType {
 	checkbox = "boolean",
 }
 
+export enum VisibilityType {
+	all = "all",
+	students = "students",
+	administration = "administration"
+}
+
 export const KeysFieldType = Object.keys(FieldType).filter((value) =>
 	isNaN(Number(value)),
 );
@@ -25,6 +31,7 @@ interface Props {
 	moderators: string[];
 	active: boolean;
 	subsections: SectionEntity[];
+	visibility: VisibilityType
 }
 
 export class SectionEntity {
@@ -34,6 +41,7 @@ export class SectionEntity {
 	private readonly active: boolean;
 	private readonly moderators: string[];
 	private readonly fields: Field[];
+	private readonly visibility: VisibilityType;
 
 	constructor(props: Props) {
 		this.id = props.id;
@@ -42,6 +50,7 @@ export class SectionEntity {
 		this.active = props.active;
 		this.moderators = props.moderators;
 		this.fields = props.fields;
+		this.visibility = props.visibility;
 	}
 
 	get getId() {
