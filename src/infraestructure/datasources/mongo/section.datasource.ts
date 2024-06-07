@@ -13,7 +13,7 @@ export class SectionDatasource implements ISectionDatasource {
 		const section = await SectionModel.findById(id);
 		if (!section)
 			throw ResponseError.notFound({
-				section: `Section with id ${id} not found.`,
+				section: `Section with id ${id} not found`,
 			});
 	}
 
@@ -25,7 +25,7 @@ export class SectionDatasource implements ISectionDatasource {
 		const section = await SectionModel.findOne({ name, id_user, id_parent });
 		if (section)
 			throw ResponseError.notFound({
-				section: `Section with name ${name} alredy exists.`,
+				section: `Section with name ${name} alredy exists`,
 			});
 	}
 
@@ -50,7 +50,7 @@ export class SectionDatasource implements ISectionDatasource {
 		const section = await SectionModel.findById(id);
 		if (!section)
 			throw ResponseError.notFound({
-				section: `Section with id ${id} not found.`,
+				section: `Section with id ${id} not found`,
 			});
 		return SectionEntity.fromObject(section);
 	}

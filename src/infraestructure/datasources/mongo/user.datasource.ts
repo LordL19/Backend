@@ -7,6 +7,7 @@ import {
 	ResponseError,
 	SearchDto,
 	SearchUsers,
+	Type,
 	type UpdateUserDto,
 	UserEntity,
 } from "../../../domain";
@@ -15,14 +16,14 @@ export class UserDatasource implements IUserDatasource {
 	private async existsUserWithId(id: string) {
 		const user = await UserModel.findById(id);
 		if (!user)
-			throw ResponseError.notFound({ user: `User with id ${id} not found.` });
+			throw ResponseError.notFound({ user: `User with id ${id} not found` });
 	}
 
 	private async existsUserWithEmail(email: string) {
 		const user = await UserModel.findOne({ email });
 		if (user)
 			throw ResponseError.notFound({
-				email: `User with email ${email} alredy exists.`,
+				email: `User with email ${email} alredy exists`,
 			});
 	}
 
@@ -43,9 +44,9 @@ export class UserDatasource implements IUserDatasource {
 		};
 	}
 	async getById(id: string): Promise<UserEntity> {
-		const user = await UserModel.findById(id).populate([{ path: "id_campus", select: ["name"] }]);
+		const user = await UserModel.findById(id);
 		if (!user)
-			throw ResponseError.notFound({ user: `User with id ${id} not found.` });
+			throw ResponseError.notFound({ user: `User with id ${id} not found` });
 		return UserEntity.fromObject(user);
 	}
 
@@ -53,13 +54,13 @@ export class UserDatasource implements IUserDatasource {
 		const user = await UserModel.findOne({ email });
 		if (!user)
 			throw ResponseError.notFound({
-				email: `User with email ${email} not found.`,
+				email: `User with email ${email} not found`,
 			});
 		return UserEntity.fromObject(user);
 	}
 
-	async validateEmail(id: string): Promise<void> {
-		await this.existsUserWithId(id);
+	async validateEmail(id: string): Promise<Type> {
+		const user = await this.getById(id);
 		await UserModel.updateOne(
 			{
 				_id: id,
@@ -68,6 +69,7 @@ export class UserDatasource implements IUserDatasource {
 				validated_email: true,
 			},
 		);
+		return user.getType;
 	}
 
 	async resetPassword(userDto: ResetPasswordDto): Promise<void> {

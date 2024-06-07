@@ -30,10 +30,14 @@ export class AuthService {
 	) { }
 
 	async validateEmail(information: InformationDto) {
-		await this.datasource.validateEmail(information.id_user);
+		const type = await this.datasource.validateEmail(information.id_user);
 		const token = {
 			data: await jwt.generateToken(
-				{ id: information.id_user, validatedEmail: true },
+				{
+					id: information.id_user,
+					type,
+					validatedEmail: true
+				},
 				EXPIRE,
 			),
 			expire: new Date(Date.now() + Number(EXPIRE)),
@@ -46,7 +50,7 @@ export class AuthService {
 	async verifyCode(verification: CodeVerificationDto) {
 		const isValidCode = code.verify(verification.code, verification.serverCode);
 		if (!isValidCode)
-			throw ResponseError.badRequest({ code: "The code is incorrect." });
+			throw ResponseError.badRequest({ code: "The code is incorrect" });
 		const token = {
 			data: await jwt.generateToken({
 				id: verification.id_user,
@@ -66,11 +70,15 @@ export class AuthService {
 		);
 		if (!isPassword)
 			throw ResponseError.badRequest({
-				password: "The password is incorrect.",
+				password: "The password is incorrect",
 			});
 		const token = {
 			data: await jwt.generateToken(
-				{ id: user.getId, validatedEmail: user.getValidatedEmail },
+				{
+					id: user.getId,
+					type: user.getType,
+					validatedEmail: user.getValidatedEmail
+				},
 				user.getValidatedEmail ? EXPIRE : "10m",
 			),
 			expire: new Date(
@@ -104,7 +112,7 @@ export class AuthService {
 		userDto.password = await bcrypt.generate(userDto.password);
 		await this.datasource.resetPassword(userDto);
 		return {
-			message: "Password successfully updated.",
+			message: "Password successfully updated",
 		};
 	}
 
@@ -145,8 +153,8 @@ export class AuthService {
 
 	async visitToken() {
 		const token = {
-			data: await jwt.generateToken({ visit: true }),
-			expire: new Date(Date.now() + 10 * 60 * 1000)
+			data: await jwt.generateToken({ visit: true }, "1h"),
+			expire: new Date(Date.now() + 1 * 60 * 60 * 1000) //1 hour
 		}
 		return token;
 	}

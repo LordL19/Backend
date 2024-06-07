@@ -43,24 +43,24 @@ export class AuthController {
 					result.token.data,
 					this.configCookie(result.token.expire),
 				);
-				res.json({ message: "The code was sent successfully." });
+				res.json({ message: "The code was sent successfully" });
 			})
 			.catch((e) => next(e));
 	}
 
-	generateVisitToken = (req: Request, res: Response, next: NextFunction) => {
+	generateVisitToken = (_req: Request, res: Response, next: NextFunction) => {
 		this.service.visitToken()
 			.then((token) => {
 				res.cookie("token", token.data, this.configCookie(token.expire));
-				res.json({ token:token.data });	
+				res.json({ token: token.data });
 			})
 			.catch((e) => next(e));
 	};
 
-	logout = (req: Request, res: Response) => {
+	logout = (_req: Request, res: Response) => {
 		res.clearCookie("token");
 		res.clearCookie("code");
-		res.json({ message: "Session successfully closed." });
+		res.json({ message: "Session successfully closed" });
 	};
 
 	login = (req: Request, res: Response, next: NextFunction) => {

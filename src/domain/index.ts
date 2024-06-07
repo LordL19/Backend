@@ -26,4 +26,4 @@ export * from "./entities/record.entity";
 export * from "./entities/section.entity";
 export * from "./entities/user.entity";
 export * from "./errors/response.error";
-export * from "./validations/dto.validation";
+export * as DtoValidation from "./validations/dto.validation";

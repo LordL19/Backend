@@ -1,6 +1,6 @@
 import { Field, VisibilityType } from "../../entities/section.entity";
 import { ResponseError } from "../../errors/response.error";
-import { DtoValidation } from "../../validations/dto.validation";
+import * as DtoValidation from "../../validations/dto.validation";
 import { InformationDto, PropsInformation } from "../shared/information.dto";
 import { SectionUtils } from "./utils";
 

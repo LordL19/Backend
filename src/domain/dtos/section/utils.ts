@@ -9,7 +9,7 @@ export class SectionUtils {
 		const valueNameLowerCase = valueName.toLowerCase();
 		if (!Array.isArray(value))
 			throw ResponseError.badRequest({
-				[valueNameLowerCase]: `${valueName} must be an array.`,
+				[valueNameLowerCase]: `${valueName} must be an array`,
 			});
 		value.forEach((item, index) => {
 			if (!item.name || !item.type)
@@ -20,17 +20,17 @@ export class SectionUtils {
 			if (typeof item.name !== "string")
 				throw ResponseError.badRequest({
 					[valueNameLowerCase]: `The item ${index + 1
-						} of ${valueName}, property name not a string.`,
+						} of ${valueName}, property name not a string`,
 				});
 			if (typeof item.type !== "string")
 				throw ResponseError.badRequest({
 					[valueNameLowerCase]: `The item ${index + 1
-						} of ${valueName}, property type not a string.`,
+						} of ${valueName}, property type not a string`,
 				});
 			if (!(item.type in FieldType))
 				throw ResponseError.badRequest({
 					[valueNameLowerCase]: `The item ${index + 1
-						} of ${valueName}, property type is not valid ${KeysFieldType.toString()}.`,
+						} of ${valueName}, property type is not valid ${KeysFieldType.toString()}`,
 				});
 		});
 		return value as Field[];

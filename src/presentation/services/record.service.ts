@@ -34,6 +34,7 @@ export class RecordService {
 					$ne: VisibilityType.administration
 				}
 				break;
+			case Type.moderator:
 			case Type.administrator:
 				if (section.getIdUser !== user.getId && !section.getModerators.includes(user.getId)) {
 					filter.visibility = {
@@ -49,7 +50,7 @@ export class RecordService {
 	async getAll(pagination: PaginationDto, information: InformationDto) {
 		const [user, section] = information.id_user
 			? await Promise.all([
-				this.userService.getById({ id: information.id_user } as InformationDto),
+				this.userService.getById(information.id_user),
 				this.sectionService.getById(information)
 			])
 			: [null, await this.sectionService.getById(information)];

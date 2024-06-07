@@ -1,7 +1,7 @@
 import type { Value } from "../../entities/record.entity";
 import { VisibilityType } from "../../entities/section.entity";
 import { ResponseError } from "../../errors/response.error";
-import { DtoValidation } from "../../validations/dto.validation";
+import * as DtoValidation from "../../validations/dto.validation";
 import { RecordUtils } from "./utils";
 
 interface Props {

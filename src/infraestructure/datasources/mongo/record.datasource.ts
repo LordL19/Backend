@@ -4,7 +4,6 @@ import {
 	RecordEntity,
 	CreateRecordDto,
 	IRecordDatasource,
-	SectionEntity,
 	ResponseError,
 } from "../../../domain";
 import { UpdateRecordDto } from "../../../domain/dtos/record/update.dto";
@@ -15,7 +14,7 @@ export class RecordDatasource implements IRecordDatasource {
 		const record = await RecordModel.findById(id);
 		if (!record)
 			throw ResponseError.notFound({
-				record: `Record with id ${id} not found.`,
+				record: `Record with id ${id} not found`,
 			});
 	}
 
@@ -40,7 +39,7 @@ export class RecordDatasource implements IRecordDatasource {
 		]);
 		if (!record)
 			throw ResponseError.notFound({
-				record: `Record with id ${id} not found.`,
+				record: `Record with id ${id} not found`,
 			});
 		return RecordEntity.fromObject(record);
 	}

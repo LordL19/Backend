@@ -15,7 +15,7 @@ export class CampusDatasource implements ICampusDatasource {
 		const campusExist = await CampusModel.findOne({ name: campusDto.name });
 		if (campusExist)
 			throw ResponseError.badRequest({
-				name: `The campus ${campusDto.name} alredy exist.`,
+				name: `The campus ${campusDto.name} alredy exist`,
 			});
 		const campus = await CampusModel.create(campusDto);
 		return CampusEntity.fromObject(campus);

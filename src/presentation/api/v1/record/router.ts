@@ -15,8 +15,8 @@ export class RecordRouter {
 		record.post(
 			"/",
 			[
+				RecordMiddleware.validationOfPermits,
 				SectionMiddleware.LoadSectionStructure,
-				RecordMiddleware.validationOfUser,
 			],
 			controller.create,
 		);
@@ -24,14 +24,14 @@ export class RecordRouter {
 		record.put(
 			"/:id",
 			[
+				RecordMiddleware.validationOfPermits,
 				SectionMiddleware.LoadSectionStructure,
-				RecordMiddleware.validationOfUser,
 			],
 			controller.update,
 		);
 		record.delete(
 			"/:id",
-			[RecordMiddleware.validationOfUser],
+			[RecordMiddleware.validationOfPermits],
 			controller.delete,
 		);
 

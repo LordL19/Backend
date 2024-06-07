@@ -57,6 +57,7 @@ export class UserEntity {
 			image_url: this.image_url || null,
 			name: this.name,
 			last_name: this.last_name,
+			type: this.type,
 			email: this.email,
 			id_campus: this.id_campus,
 			validated_email: this.validated_email

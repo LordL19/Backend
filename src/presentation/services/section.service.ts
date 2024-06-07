@@ -33,6 +33,7 @@ export class SectionService {
 					$ne: VisibilityType.administration
 				}
 				break;
+			case Type.moderator:
 			case Type.administrator:
 				filter.$or = [
 					{ visibility: { $in: [VisibilityType.all, VisibilityType.students] } },
@@ -48,7 +49,7 @@ export class SectionService {
 	}
 
 	async getAll(pagination: PaginationDto, idUser: string) {
-		const user = idUser ? await this.service.getById({ id: idUser } as InformationDto) : null
+		const user = idUser ? await this.service.getById(idUser) : null
 		const filter = this.buildFilter(user);
 		const [total, data] = await Promise.all([
 			this.datasource.getAllCount(filter),
