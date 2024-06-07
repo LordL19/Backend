@@ -4,15 +4,15 @@ import { ResponseError } from "../../domain";
 export class ErrorMiddleware {
 	static handleError = (
 		error: unknown,
-		req: Request,
+		_req: Request,
 		res: Response,
-		next: NextFunction,
+		_next: NextFunction,
 	) => {
 		if (error instanceof ResponseError)
 			return res.status(error.statusCode).json({ error: error.data });
 		console.log(error);
 		if (error instanceof Error)
 			return res.status(500).json({ error: error.message });
-		return res.status(500).json({ error: "Internal server error." });
+		return res.status(500).json({ error: "Internal server error" });
 	};
 }

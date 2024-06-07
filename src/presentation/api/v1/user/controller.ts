@@ -20,9 +20,9 @@ export class UserController {
 	};
 
 	getById = (req: Request, res: Response, next: NextFunction) => {
-		const information = InformationDto.create(req.body);
+		const { id_user } = InformationDto.create(req.body);
 		this.service
-			.getById(information)
+			.getById(id_user)
 			.then((result) => res.json(result.getBasicData))
 			.catch((e) => next(e));
 	};
@@ -36,9 +36,9 @@ export class UserController {
 	};
 
 	delete = (req: Request, res: Response, next: NextFunction) => {
-		const information = InformationDto.create(req.params);
+		const { id_user } = InformationDto.create(req.params);
 		this.service
-			.delete(information)
+			.delete(id_user)
 			.then(() => res.json({ message: "resource deleted!" }))
 			.catch((e) => next(e));
 	};

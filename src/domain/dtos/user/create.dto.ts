@@ -1,6 +1,6 @@
 import { Type } from "../../entities/user.entity";
 import { ResponseError } from "../../errors/response.error";
-import { DtoValidation } from "../../validations/dto.validation";
+import * as DtoValidation from "../../validations/dto.validation";
 
 interface Props {
 	name: string;

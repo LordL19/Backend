@@ -1,4 +1,4 @@
-import { DtoValidation } from "../../validations/dto.validation";
+import * as DtoValidation from "../../validations/dto.validation";
 import { InformationDto, PropsInformation } from "../shared/information.dto";
 
 interface Props extends PropsInformation {

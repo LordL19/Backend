@@ -10,7 +10,7 @@ export class ResponseError extends Error {
 		return new ResponseError(400, data);
 	}
 
-	static unauthorized(data: string = "You are not allowed to perform this action.") {
+	static unauthorized(data: string = "You are not allowed to perform this action") {
 		return new ResponseError(401, { auth: data });
 	}
 
@@ -22,7 +22,7 @@ export class ResponseError extends Error {
 		return new ResponseError(404, data);
 	}
 
-	static internalServerError(data = "Internal server error.") {
+	static internalServerError(data = "Internal server error") {
 		return new ResponseError(500, data);
 	}
 }

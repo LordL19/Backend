@@ -1,5 +1,4 @@
 import { type Document, Schema, model } from "mongoose";
-import { text } from "stream/consumers";
 
 interface IUser extends Document {
 	img_url: string

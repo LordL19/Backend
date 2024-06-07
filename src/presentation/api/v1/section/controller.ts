@@ -8,7 +8,7 @@ import {
 import { SectionService } from "../../../services/section.service";
 
 export class SectionController {
-	constructor(private readonly service: SectionService) {}
+	constructor(private readonly service: SectionService) { }
 
 	getAll = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
@@ -18,11 +18,20 @@ export class SectionController {
 			.catch((e) => next(e));
 	};
 
-	getTypes = (req: Request, res: Response) => {
+	getTypes = (_req: Request, res: Response) => {
 		res.json(this.service.getTypes());
 	};
 
 	getByID = (req: Request, res: Response, next: NextFunction) => {
+		const pagination = PaginationDto.create(req.query);
+		const information = InformationDto.create(req.params);
+		this.service
+			.getChildById(pagination, information)
+			.then((result) => res.json(result))
+			.catch((e) => next(e));
+	};
+
+	getModerators = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
 		const information = InformationDto.create(req.params);
 		this.service

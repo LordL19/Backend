@@ -22,11 +22,11 @@ export class RecordUtils {
 			const value = data[item.name];
 			if (!value && type !== "boolean")
 				throw ResponseError.badRequest({
-					data: `The property ${item.name} can't be empty.`,
+					data: `The property ${item.name} can't be empty`,
 				});
 			if (typeof value !== type)
 				throw ResponseError.badRequest({
-					data: `The value of ${item.name} must be ${type}.`,
+					data: `The value of ${item.name} must be ${type}`,
 				});
 			obj[item.name] = this.validationField(
 				data[item.name],
@@ -49,7 +49,7 @@ export class RecordUtils {
 				value = new Date(value as string);
 				if (value.toString() === "Invalid Date")
 					throw ResponseError.badRequest({
-						data: `The property ${name} is a invalid Date (ISO 8991).`,
+						data: `The property ${name} is a invalid Date (ISO 8991)`,
 					});
 				break;
 		}

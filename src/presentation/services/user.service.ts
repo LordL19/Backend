@@ -17,15 +17,15 @@ export class UserService {
 		}
 	}
 
-	getById(information: InformationDto) {
-		return this.datasource.getById(information.id);
+	getById(id: string) {
+		return this.datasource.getById(id);
 	}
 
 	update(userDto: UpdateUserDto) {
 		return this.datasource.update(userDto);
 	}
 
-	delete(information: InformationDto) {
-		return this.datasource.delete(information.id);
+	delete(id: string) {
+		return this.datasource.delete(id);
 	}
 }

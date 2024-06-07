@@ -1,4 +1,4 @@
-import { DtoValidation } from "../../validations/dto.validation";
+import * as DtoValidation from "../../validations/dto.validation";
 
 interface Props {
 	value: string;
