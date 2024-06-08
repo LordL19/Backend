@@ -36,7 +36,7 @@ export class RecordService {
 				break;
 			case Type.moderator:
 			case Type.administrator:
-				if (section.getIdUser !== user.getId && !section.getModerators.includes(user.getId)) {
+				if (section.getIdUser !== user.getId && !section.getModeratorsIds.includes(user.getId)) {
 					filter.visibility = {
 						$ne: VisibilityType.administration
 					}

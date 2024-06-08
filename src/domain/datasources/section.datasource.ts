@@ -9,6 +9,8 @@ export interface ISectionDatasource {
 	getById(id: string): Promise<SectionEntity>;
 	getAllCount(filter: Record<string, any>): Promise<number>;
 	create(sectionDto: CreateSectionDto): Promise<SectionEntity>;
+	addModerators(moderators: string[], id: string): Promise<void>;
 	update(sectionDto: UpdateSectionDto): Promise<SectionEntity>;
 	delete(id: string): Promise<void>;
+	deleteModerators(moderators: string[], id: string): Promise<void>;
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
 	CreateSectionDto,
+	DtoValidation,
 	InformationDto,
 	PaginationDto,
 	UpdateSectionDto,
@@ -32,10 +33,9 @@ export class SectionController {
 	};
 
 	getModerators = (req: Request, res: Response, next: NextFunction) => {
-		const pagination = PaginationDto.create(req.query);
 		const information = InformationDto.create(req.params);
 		this.service
-			.getChildById(pagination, information)
+			.getModerators(information)
 			.then((result) => res.json(result))
 			.catch((e) => next(e));
 	};
@@ -45,6 +45,15 @@ export class SectionController {
 		this.service
 			.create(createSection)
 			.then((result) => res.json(result))
+			.catch((e) => next(e));
+	};
+
+	addModerators = (req: Request, res: Response, next: NextFunction) => {
+		const { id } = InformationDto.create(req.params);
+		const moderators = DtoValidation.get(req.body.moderators, "Moderators").required().asArray().value()
+		this.service
+			.addModerators(moderators, id)
+			.then(() => res.json({ message: "Moderators successfully added" }))
 			.catch((e) => next(e));
 	};
 
@@ -64,6 +73,15 @@ export class SectionController {
 		this.service
 			.delete(information)
 			.then(() => res.json({ message: "Deleted!" }))
+			.catch((e) => next(e));
+	};
+
+	deleteModerators = (req: Request, res: Response, next: NextFunction) => {
+		const { id } = InformationDto.create(req.params);
+		const moderators = DtoValidation.get(req.body.moderators, "Moderators").required().asArray().value()
+		this.service
+			.deleteModerators(moderators, id)
+			.then(() => res.json({ message: "Moderators successfully removed" }))
 			.catch((e) => next(e));
 	};
 }

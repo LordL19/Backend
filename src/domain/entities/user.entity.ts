@@ -54,7 +54,7 @@ export class UserEntity {
 	get getBasicData() {
 		return {
 			id: this.id,
-			image_url: this.image_url || null,
+			image_url: this.image_url,
 			name: this.name,
 			last_name: this.last_name,
 			type: this.type,
