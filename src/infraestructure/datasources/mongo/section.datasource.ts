@@ -69,6 +69,19 @@ export class SectionDatasource implements ISectionDatasource {
 		return SectionEntity.fromObject(section);
 	}
 
+	async addModerators(moderators: string[], id: string): Promise<void> {
+		await this.existsSectionWithId(id);
+		await SectionModel.updateOne({
+			_id: id
+		}, {
+			$addToSet: {
+				moderators: {
+					$each: moderators
+				}
+			}
+		});
+	}
+
 	async update(sectionDto: UpdateSectionDto): Promise<SectionEntity> {
 		await this.existsSectionWithId(sectionDto.id);
 		const sectionUpdate = await SectionModel.findByIdAndUpdate(
@@ -82,5 +95,16 @@ export class SectionDatasource implements ISectionDatasource {
 	async delete(id: string): Promise<void> {
 		await this.existsSectionWithId(id);
 		await SectionModel.updateOne({ _id: id }, { active: false });
+	}
+
+	async deleteModerators(moderators: string[], id: string): Promise<void> {
+		await this.existsSectionWithId(id);
+		await SectionModel.updateOne({
+			_id: id
+		}, {
+			$pullAll: {
+				moderators
+			}
+		});
 	}
 }

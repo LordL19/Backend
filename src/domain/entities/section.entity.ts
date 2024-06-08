@@ -28,7 +28,7 @@ interface Props {
 	name: string;
 	fields: Field[];
 	id_user: string;
-	moderators: string[];
+	moderators: Record<string, any>[];
 	active: boolean;
 	subsections: SectionEntity[];
 	visibility: VisibilityType
@@ -39,7 +39,7 @@ export class SectionEntity {
 	private readonly id_user: string;
 	private readonly name: string;
 	private readonly active: boolean;
-	private readonly moderators: string[];
+	private readonly moderators: Record<string, any>[];
 	private readonly fields: Field[];
 	private readonly visibility: VisibilityType;
 
@@ -59,6 +59,10 @@ export class SectionEntity {
 
 	get getModerators() {
 		return this.moderators;
+	}
+
+	get getModeratorsIds() {
+		return this.moderators.map(item => `${item._id}`);
 	}
 
 	get getIdUser() {

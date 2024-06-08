@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { PreMiddlewareFunction, Schema, model } from "mongoose";
 
 const SectionSchema: Schema = new Schema({
 	name: {
@@ -43,5 +43,12 @@ const SectionSchema: Schema = new Schema({
 		},
 	],
 });
+
+const handlePopulate: PreMiddlewareFunction = function (this, next) {
+	this.populate({ path: "moderators", select: ["name", "last_name", "email", "image_url"] })
+	next();
+}
+
+SectionSchema.pre(/^find/, handlePopulate)
 
 export const SectionModel = model("sections", SectionSchema);

@@ -77,15 +77,28 @@ export class SectionService {
 		};
 	}
 
+	async getModerators(information: InformationDto) {
+		const section = await this.datasource.getById(information.id);
+		return { moderators: section.getModerators }
+	}
+
 	create(sectionDto: CreateSectionDto) {
 		return this.datasource.create(sectionDto);
 	}
 
-	async update(sectionDto: UpdateSectionDto) {
+	addModerators(moderatos: string[], id: string) {
+		return this.datasource.addModerators(moderatos, id);
+	}
+
+	update(sectionDto: UpdateSectionDto) {
 		return this.datasource.update(sectionDto);
 	}
 
 	delete(information: InformationDto) {
 		return this.datasource.delete(information.id);
+	}
+
+	deleteModerators(moderatos: string[], id: string) {
+		return this.datasource.deleteModerators(moderatos, id);
 	}
 }

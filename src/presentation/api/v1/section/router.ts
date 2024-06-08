@@ -14,18 +14,20 @@ export class SectionRouter {
 		section.get("/types", [AuthMiddleware.ValidateUser], controller.getTypes);
 		section.get("/:id", [AuthMiddleware.ValidateUser], controller.getByID);
 		section.get("/:id/records", [AuthMiddleware.ValidateVisit], recordController.getAll);
-		
+
 		section.use(AuthMiddleware.ValidateUser);
-		section.get("/moderators", [SectionMiddleware.validationOfAdministrator], controller.create);
-		
+		section.get("/:id/moderators", [SectionMiddleware.validationOfAdministrator], controller.getModerators);
+
 		section.post("/", [SectionMiddleware.validationOfAdministrator], controller.create);
-		section.post("/moderators", [SectionMiddleware.validationOfAdministrator], controller.create);
+		section.post("/:id/moderators", [SectionMiddleware.validationOfAdministrator], controller.addModerators);
 
 		section.put(
 			"/:id",
 			[SectionMiddleware.validationOfAdministrator, SectionMiddleware.validationOfPermits],
 			controller.update,
 		);
+		section.put("/:id/moderators", [SectionMiddleware.validationOfAdministrator], controller.deleteModerators);
+		
 		section.delete(
 			"/:id",
 			[SectionMiddleware.validationOfAdministrator, SectionMiddleware.validationOfPermits],

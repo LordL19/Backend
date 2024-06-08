@@ -7,7 +7,7 @@ export class RecordMiddleware {
 		const id_section: string = req.body.id_section;
 		if (!id_section) return res.status(400).json({ error: { id_section: "Id section is required" } });
 		const section = await Services.section.getById({ id: id_section } as InformationDto);
-		if (section.getIdUser !== req.body.id_user! && !section.getModerators.includes(req.body.id_user))
+		if (section.getIdUser !== req.body.id_user && !section.getModeratorsIds.includes(req.body.id_user))
 			return res.status(401).json({
 				error: {
 					auth: "You don't have permission to perform this action",
