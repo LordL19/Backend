@@ -68,16 +68,12 @@ export class AuthController {
 		this.service
 			.login(loginDto)
 			.then((result) => {
-				res.cookie(
-					"token",
-					result.token.data,
-					this.configCookie(result.token.expire),
-				);
-				const {
-					user,
-					token: { data },
-				} = result;
-				res.json({ user, token: data });
+				const { type, validatedEmail, token } = result;
+				res.setHeader("X-User-Type", type);
+				res.setHeader("X-User-Email", `${validatedEmail}`);
+				res.setHeader("Access-Control-Expose-Headers", "X-User-Type, X-User-Email");
+				res.cookie("token", token.data, this.configCookie(token.expire));
+				res.json({ token: token.data });
 			})
 			.catch((e) => next(e));
 	};
@@ -87,21 +83,12 @@ export class AuthController {
 		this.service
 			.register(userDto)
 			.then((result) => {
-				res.cookie(
-					"token",
-					result.token.data,
-					this.configCookie(result.token.expire),
-				);
-				res.cookie(
-					"code",
-					result.code.data,
-					this.configCookie(result.code.expire),
-				);
-				const {
-					user,
-					token: { data },
-				} = result;
-				res.json({ user, token: data });
+				const { type, token, code } = result;
+				res.setHeader("X-User-Type", type);
+				res.setHeader("Access-Control-Expose-Headers", "X-User-Type");
+				res.cookie("code", code.data, this.configCookie(code.expire));
+				res.cookie("token", token.data, this.configCookie(token.expire));
+				res.json({ token: token.data });
 			})
 			.catch((e) => next(e));
 	};

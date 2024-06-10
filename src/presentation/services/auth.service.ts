@@ -86,7 +86,8 @@ export class AuthService {
 			),
 		};
 		return {
-			user: user.getBasicData,
+			type: user.getType,
+			validatedEmail: user.getValidatedEmail,
 			token,
 		};
 	}
@@ -102,7 +103,7 @@ export class AuthService {
 			TypeEmail.validationEmail,
 		);
 		return {
-			user: user.getBasicData,
+			type: user.getType,
 			token,
 			code,
 		};
