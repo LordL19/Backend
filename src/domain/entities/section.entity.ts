@@ -4,6 +4,7 @@ export enum FieldType {
 	datetime,
 	date,
 	time,
+	url,
 	number = "number",
 	checkbox = "boolean",
 }

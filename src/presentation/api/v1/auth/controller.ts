@@ -15,7 +15,8 @@ export class AuthController {
 	private configCookie(expire: Date) {
 		return {
 			httpOnly: true,
-			sameSite: "lax",
+			sameSite: "strict",
+			secure: true,
 			expires: expire,
 		} as CookieOptions;
 	}
