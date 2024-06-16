@@ -31,7 +31,7 @@ const SectionSchema: Schema = new Schema({
 			},
 			type: {
 				type: String,
-				enum: ["text", "number", "date", "datetime", "time", "checkbox", "file"],
+				enum: ["text", "number", "date", "datetime", "time", "checkbox", "file", "url"],
 				required: true,
 			},
 		},

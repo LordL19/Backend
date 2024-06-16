@@ -31,15 +31,12 @@ export class UserDatasource implements IUserDatasource {
 		pagination: PaginationDto,
 		search: SearchDto,
 	): Promise<SearchUsers> {
-		const [total, foundUsers] = await Promise.all([
-			UserModel.find({ full_name: { $regex: search.value, $options: "i" } }).countDocuments(),
-			UserModel.find({ full_name: { $regex: search.value, $options: "i" } })
-				.skip((pagination.page - 1) * pagination.limit)
-				.limit(pagination.limit),
-		]);
+		const foundUsers = await UserModel.find({ _id: { $ne: search.fromUser }, full_name: { $regex: search.value, $options: "i" } })
+			.skip((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit)
 		const users = foundUsers.map(UserEntity.fromObject);
 		return {
-			total,
+			total: foundUsers.length,
 			users,
 		};
 	}
