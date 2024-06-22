@@ -12,7 +12,7 @@ export class UserController {
 
 	getAll = (req: Request, res: Response, next: NextFunction) => {
 		const pagination = PaginationDto.create(req.query);
-		const search = SearchDto.create(req.query);
+		const search = SearchDto.create({ ...req.body, ...req.query });
 		this.service
 			.getAll(pagination, search)
 			.then((result) => res.json(result))
