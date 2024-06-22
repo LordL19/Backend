@@ -22,7 +22,12 @@ export class SectionDatasource implements ISectionDatasource {
 		id_user: string,
 		id_parent: string,
 	) {
-		const section = await SectionModel.findOne({ name, id_user, id_parent });
+		const section = await SectionModel.findOne({
+			$or: [
+				{ name, id_parent },
+				{ name, id_user, id_parent }
+			]
+		});
 		if (section)
 			throw ResponseError.notFound({
 				section: `Section with name ${name} alredy exists`,

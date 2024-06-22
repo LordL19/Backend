@@ -15,4 +15,5 @@ export const envs = {
 	MAILER_KEY: get("MAILER_KEY").required().asString(),
 	BUCKET_STORAGE: get("BUCKET_STORAGE").required().asString(),
 	KEY_STORAGE: get("KEY_STORAGE").required().asJson(),
+	SERVICE_URL: get("SERVICE_URL").required().asString(),
 };

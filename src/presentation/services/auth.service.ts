@@ -48,7 +48,7 @@ export class AuthService {
 	}
 
 	async verifyCode(verification: CodeVerificationDto) {
-		const isValidCode = code.verify(verification.code, verification.serverCode);
+		const isValidCode = await bcrypt.compare(verification.code, verification.serverCode);
 		if (!isValidCode)
 			throw ResponseError.badRequest({ code: "The code is incorrect" });
 		const token = {
@@ -137,7 +137,7 @@ export class AuthService {
 				break;
 		}
 		const [codeJwt, tokenJwt] = await Promise.all([
-			Jwt.generateToken({ code: codeGenerated }),
+			Jwt.generateToken({ code: await bcrypt.generate(codeGenerated) }),
 			jwt.generateToken({
 				id: user.getId,
 				validatedEmail: user.getValidatedEmail,

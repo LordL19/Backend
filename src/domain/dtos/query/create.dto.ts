@@ -14,7 +14,7 @@ export class CreateQueryDto {
 	}
 
 	static create(object: Record<string, any>): CreateQueryDto {
-		const id_section = DtoValidation.get(object.id_section, "Id_section").required().asString().value();
+		const id_section = object.id_section && DtoValidation.get(object.id_section, "Id_section").asString().value();
 		const data = DtoValidation.get(object.data, "Data").asObject().value();
 		return new CreateQueryDto({ data, id_section });
 	}
