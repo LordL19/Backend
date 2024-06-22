@@ -1,5 +1,6 @@
 import { envs } from "../../config";
 import { Datasources } from "../datasources/datasources";
+import { AssistantService } from "./assistant.service";
 import { AuthService } from "./auth.service";
 import { CampusService } from "./campus.service";
 import { EmailService } from "./email.service";
@@ -18,6 +19,7 @@ export class Services {
 	private static _sectionInstance: SectionService;
 	private static _recordInstance: RecordService;
 	private static _storageInstance: StorageService;
+	private static _assistantInstance: AssistantService;
 
 	static get auth() {
 		if (!this._authInstance) {
@@ -87,5 +89,12 @@ export class Services {
 			this._queryService = new QueryService(Datasources.query);
 		}
 		return this._queryService;
+	}
+
+	static get assistant() {
+		if (!this._assistantInstance) {
+			this._assistantInstance = new AssistantService(envs.SERVICE_URL);
+		}
+		return this._assistantInstance;
 	}
 }
