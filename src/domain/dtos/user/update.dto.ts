@@ -23,7 +23,7 @@ export class UpdateUserDto extends InformationDto {
 		const obj: Record<string, any> = {};
 
 		if (this.name) obj.name = this.name;
-		if (this.image_url) obj.image_url = this.image_url;
+		if (this.image_url !== undefined) obj.image_url = this.image_url;
 		if (this.last_name) obj.last_name = this.last_name;
 
 		return obj;
